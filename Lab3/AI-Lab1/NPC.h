@@ -15,10 +15,10 @@ public:
 	void update(sf::Vector2f t_targetPos);
 	void draw(sf::RenderWindow& t_window);
 	sf::Vector2f seek(sf::Vector2f t_targetPosition);
-	void arrive(sf::Vector2f t_targetPos);
+	sf::Vector2f arrive(sf::Vector2f t_targetPos);
 	sf::Vector2f flee(sf::Vector2f t_targetPos);
 	void wander();
-	void normalize();
+	sf::Vector2f normalize(sf::Vector2f normVector);
 	float getNewOrientation();
 	float face(sf::Vector2f targetPos);
 	void setVisionCone(sf::Vector2f t_targetPos);
@@ -32,7 +32,8 @@ private:
 	sf::RectangleShape m_rightLine;
 
 	
-	float m_maxAcceleration = 10.0f;
+	float m_maxAcceleration = 20.0f;
+	float m_speed = 10.0f;
 	float m_rotation = 270.0f;
 	float m_radianCalculation = 3.1415926536 / 180;
 	float angleOfSight = 35;

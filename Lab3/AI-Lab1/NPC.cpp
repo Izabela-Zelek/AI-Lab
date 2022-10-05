@@ -57,8 +57,7 @@ void NPC::update(sf::Vector2f t_targetPos)
 	{
 	case Type::SEEK:
 		m_velocity += seek(t_targetPos) * dt.asSeconds();
-		/*seek(t_targetPos);
-		arrive(t_targetPos);*/
+		m_velocity += arrive(t_targetPos) * dt.asSeconds();
 		break;
 	case Type::FLEE:
 		m_velocity += flee(t_targetPos) * dt.asSeconds();
@@ -117,7 +116,7 @@ sf::Vector2f NPC::seek(sf::Vector2f t_targetPos)
 	sf::Vector2f linear;
 
 	m_direction = t_targetPos - m_npcSprite.getPosition();
-	normalize();
+	m_direction = normalize(m_direction);
 
 	linear = m_direction * m_maxAcceleration;
 		
@@ -126,27 +125,42 @@ sf::Vector2f NPC::seek(sf::Vector2f t_targetPos)
 
 }
 
-void NPC::arrive(sf::Vector2f t_targetPos)
+sf::Vector2f NPC::arrive(sf::Vector2f t_targetPos)
 {
-	/*float radius = 2.0f;
-	float timeToTarget = 20.0f;
+	sf::Vector2f linear;
 
-	m_velocity = t_targetPos - m_npcSprite.getPosition();
-	if (sqrt((m_velocity.x * m_velocity.x) + (m_velocity.y * m_velocity.y)) >= radius)
+	float radius = 20.0f;
+	float slowRadius = 50.0f;
+	float timeToTarget = 0.1f;
+	float targetSpeed;
+
+	sf::Vector2f direction = t_targetPos - m_npcSprite.getPosition();
+	float distance = sqrt((direction.x * direction.x) + (direction.y * direction.y));
+
+	if (distance < radius)
 	{
-		m_speed = MAX_SPEED;
-		m_velocity = m_velocity / timeToTarget;
-		if(sqrt((m_velocity.x * m_velocity.x) + (m_velocity.y * m_velocity.y)) > m_speed)
-		{
-			normalize();
-			m_velocity = m_velocity * m_speed;
-			m_npcSprite.setRotation(getNewOrientation());
-		}
+		return { 0.0f, 0.0f };
 	}
+
+	if (distance > slowRadius)
+		targetSpeed = m_speed;
 	else
+		targetSpeed = m_speed * distance / slowRadius;
+
+	normalize(m_direction);
+	m_direction *= targetSpeed;
+
+	linear = m_direction - m_velocity;
+	linear /= timeToTarget;
+
+
+	if (sqrt((linear.x * linear.x) + (linear.y * linear.y)) > m_maxAcceleration)
 	{
-		m_speed = 0;
-	}*/
+		linear = normalize(linear);
+		linear *= m_maxAcceleration;
+	}
+
+	return linear;
 }
 
 sf::Vector2f NPC::flee(sf::Vector2f t_targetPos)
@@ -154,7 +168,7 @@ sf::Vector2f NPC::flee(sf::Vector2f t_targetPos)
 	sf::Vector2f linear;
 
 	m_direction = m_npcSprite.getPosition() - t_targetPos;
-	normalize();
+	m_direction = normalize(m_direction);
 	linear = m_direction * m_maxAcceleration;
 
 	return linear;
@@ -182,10 +196,10 @@ void NPC::wander()
 
 }
 
-void NPC::normalize()
+sf::Vector2f NPC::normalize(sf::Vector2f normVector)
 {
-	float length = sqrt((m_direction.x * m_direction.x) + (m_direction.y * m_direction.y));
-	m_direction = { m_direction.x / length, m_direction.y / length };
+	float length = sqrt((normVector.x * normVector.x) + (normVector.y * normVector.y));
+	return { normVector.x / length, normVector.y / length };
 }
 
 float NPC::getNewOrientation()
