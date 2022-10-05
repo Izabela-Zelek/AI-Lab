@@ -63,7 +63,7 @@ void NPC::update(sf::Vector2f t_targetPos)
 		m_velocity += flee(t_targetPos) * dt.asSeconds();
 		break;
 	case Type::WANDER:
-		wander();
+		m_velocity += wander() * dt.asSeconds();
 		break;
 	default:
 		break;
@@ -174,25 +174,27 @@ sf::Vector2f NPC::flee(sf::Vector2f t_targetPos)
 	return linear;
 }
 
-void NPC::wander()
+sf::Vector2f NPC::wander()
 {
-//		//m_npcSprite.setRotation(getNewOrientation());
-//		//m_npcSprite.setRotation(m_npcSprite.getRotation() + 5 * (std::rand() % 5 - 2));
-//		//m_velocity = { std::cos(m_radianCalculation * (m_npcSprite.getRotation())) * m_speed, std::sin(m_radianCalculation * (m_npcSprite.getRotation())) * m_speed };
-//		float wanderRadius = 400;
-//		float wanderOffset = 300;
-//		float wanderOrientation = 0;
-//
-//		wanderOrientation += (std::rand() % 3 - 1) * 2;
-//		float targetOrientation = wanderOrientation + m_npcSprite.getRotation();
-//		m_target.x = m_npcSprite.getPosition().x + wanderOffset * std::cos(m_radianCalculation * (m_npcSprite.getRotation()));
-//		m_target.y = m_npcSprite.getPosition().y + wanderOffset * std::sin(m_radianCalculation * (m_npcSprite.getRotation()));
-//		m_target.x += wanderRadius * std::cos(m_radianCalculation * (targetOrientation));
-//		m_target.y += wanderRadius * std::sin(m_radianCalculation * (targetOrientation));
-//		m_npcSprite.setRotation(face(m_target));
-//
-//		m_velocity.x = std::cos(m_radianCalculation * (m_npcSprite.getRotation())) * m_speed;
-//		m_velocity.y = std::sin(m_radianCalculation * (m_npcSprite.getRotation())) * m_speed;
+	sf::Vector2f linear;
+
+		float wanderRadius = 400;
+		float wanderOffset = 300;
+		float wanderOrientation = 0;
+
+		wanderOrientation += (std::rand() % 3 - 1) * 2;
+		float targetOrientation = wanderOrientation + m_npcSprite.getRotation();
+		m_target.x = m_npcSprite.getPosition().x + wanderOffset * std::cos(m_radianCalculation * (m_npcSprite.getRotation()));
+		m_target.y = m_npcSprite.getPosition().y + wanderOffset * std::sin(m_radianCalculation * (m_npcSprite.getRotation()));
+		m_target.x += wanderRadius * std::cos(m_radianCalculation * (targetOrientation));
+		m_target.y += wanderRadius * std::sin(m_radianCalculation * (targetOrientation));
+
+		m_npcSprite.setRotation(face(m_target));
+
+		linear.x = std::cos(m_radianCalculation * (m_npcSprite.getRotation())) * m_maxAcceleration;
+		linear.y = std::sin(m_radianCalculation * (m_npcSprite.getRotation())) * m_maxAcceleration;
+
+		return linear;
 
 }
 
