@@ -8,8 +8,8 @@ Game::Game() :
 	std::srand(time(NULL));
 	initBG();
 	m_player.initialize();
-	//m_seekNpc.initialize(0);
-	m_fleeNpc.initialize(1);
+	m_seekNpc.initialize(0);
+	//m_fleeNpc.initialize(1);
 	//m_wanderNpc.initialize(2);
 }
 

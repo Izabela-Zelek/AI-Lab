@@ -56,8 +56,9 @@ void NPC::update(sf::Vector2f t_targetPos)
 	switch (m_npcType)
 	{
 	case Type::SEEK:
-		seek(t_targetPos);
-		arrive(t_targetPos);
+		m_velocity += seek(t_targetPos) * dt.asSeconds();
+		/*seek(t_targetPos);
+		arrive(t_targetPos);*/
 		break;
 	case Type::FLEE:
 		m_velocity += flee(t_targetPos) * dt.asSeconds();
@@ -111,13 +112,17 @@ void NPC::checkBoundary()
 	}
 }
 
-void NPC::seek(sf::Vector2f t_targetPos)
+sf::Vector2f NPC::seek(sf::Vector2f t_targetPos)
 {
-	/*m_velocity = t_targetPos - m_npcSprite.getPosition();
+	sf::Vector2f linear;
+
+	m_direction = t_targetPos - m_npcSprite.getPosition();
 	normalize();
-	m_velocity = m_velocity * m_speed;
+
+	linear = m_direction * m_maxAcceleration;
 		
-	m_npcSprite.setRotation(getNewOrientation());*/
+
+	return linear;
 
 }
 

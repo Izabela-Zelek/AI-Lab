@@ -14,7 +14,7 @@ public:
 	void initialize(int enemyType);
 	void update(sf::Vector2f t_targetPos);
 	void draw(sf::RenderWindow& t_window);
-	void seek(sf::Vector2f t_targetPosition);
+	sf::Vector2f seek(sf::Vector2f t_targetPosition);
 	void arrive(sf::Vector2f t_targetPos);
 	sf::Vector2f flee(sf::Vector2f t_targetPos);
 	void wander();
