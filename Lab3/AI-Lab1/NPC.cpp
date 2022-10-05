@@ -41,6 +41,8 @@ void NPC::initialize(int enemyType)
 	m_leftLine.setFillColor(sf::Color::Green);
 	m_rightLine.setSize({ 200,1 });
 	m_rightLine.setFillColor(sf::Color::Green);
+
+	dt = clock.getElapsedTime();
 }
 
 /// <summary>
@@ -49,6 +51,8 @@ void NPC::initialize(int enemyType)
 /// </summary>
 void NPC::update(sf::Vector2f t_targetPos)
 {
+	m_npcSprite.move(m_velocity * dt.asSeconds());
+
 	switch (m_npcType)
 	{
 	case Type::SEEK:
@@ -56,7 +60,7 @@ void NPC::update(sf::Vector2f t_targetPos)
 		arrive(t_targetPos);
 		break;
 	case Type::FLEE:
-		flee(t_targetPos);
+		m_velocity += flee(t_targetPos) * dt.asSeconds();
 		break;
 	case Type::WANDER:
 		wander();
@@ -64,8 +68,12 @@ void NPC::update(sf::Vector2f t_targetPos)
 	default:
 		break;
 	}
-	
-	m_npcSprite.setPosition(m_npcSprite.getPosition() + m_velocity);
+
+	//m_npcSprite.rotate(m_angularVelocity * dt.asSeconds());
+
+
+
+	//m_npcSprite.setPosition(m_npcSprite.getPosition() + m_velocity);
 	
 	setVisionCone(t_targetPos);
 	checkBoundary();
@@ -105,17 +113,17 @@ void NPC::checkBoundary()
 
 void NPC::seek(sf::Vector2f t_targetPos)
 {
-	m_velocity = t_targetPos - m_npcSprite.getPosition();
+	/*m_velocity = t_targetPos - m_npcSprite.getPosition();
 	normalize();
 	m_velocity = m_velocity * m_speed;
 		
-	m_npcSprite.setRotation(getNewOrientation());
+	m_npcSprite.setRotation(getNewOrientation());*/
 
 }
 
 void NPC::arrive(sf::Vector2f t_targetPos)
 {
-	float radius = 2.0f;
+	/*float radius = 2.0f;
 	float timeToTarget = 20.0f;
 
 	m_velocity = t_targetPos - m_npcSprite.getPosition();
@@ -133,59 +141,46 @@ void NPC::arrive(sf::Vector2f t_targetPos)
 	else
 	{
 		m_speed = 0;
-	}
+	}*/
 }
 
-void NPC::flee(sf::Vector2f t_targetPos)
+sf::Vector2f NPC::flee(sf::Vector2f t_targetPos)
 {
-	float fleeRadius = 400.0f;
-	float speedUpRadius = 200.0f;
+	sf::Vector2f linear;
 
-	if (sqrt(((m_npcSprite.getPosition().x - t_targetPos.x) * (m_npcSprite.getPosition().x - t_targetPos.x)) +
-		((m_npcSprite.getPosition().y - t_targetPos.y) * (m_npcSprite.getPosition().y - t_targetPos.y))) <= fleeRadius)
-	{
-		m_velocity = m_npcSprite.getPosition() - t_targetPos;
-		if (m_speed < MAX_SPEED && sqrt((m_velocity.x * m_velocity.x) + (m_velocity.y * m_velocity.y)) <= speedUpRadius)
-		{
-			m_speed = m_speed + 0.1f;
-		}
-		else if (m_speed > 2.0f && sqrt((m_velocity.x * m_velocity.x) + (m_velocity.y * m_velocity.y)) > speedUpRadius)
-		{
-			m_speed = m_speed - 0.1f;
-		}
-		normalize();
-		m_velocity = m_velocity * m_speed;
+	m_direction = m_npcSprite.getPosition() - t_targetPos;
+	normalize();
+	linear = m_direction * m_maxAcceleration;
 
-		m_npcSprite.setRotation(getNewOrientation());
-	}
+	return linear;
 }
 
 void NPC::wander()
 {
-		//m_npcSprite.setRotation(getNewOrientation());
-		//m_npcSprite.setRotation(m_npcSprite.getRotation() + 5 * (std::rand() % 5 - 2));
-		//m_velocity = { std::cos(m_radianCalculation * (m_npcSprite.getRotation())) * m_speed, std::sin(m_radianCalculation * (m_npcSprite.getRotation())) * m_speed };
-		float wanderRadius = 1000;
-		float wanderOffset = 100;
-		float wanderOrientation = 0;
-
-		wanderOrientation += (std::rand() % 5 - 2) * 2;
-		float targetOrientation = wanderOrientation + m_npcSprite.getRotation();
-		m_target.x = m_npcSprite.getPosition().x + wanderOffset * std::cos(m_radianCalculation * (m_npcSprite.getRotation()));
-		m_target.y = m_npcSprite.getPosition().y + wanderOffset * std::sin(m_radianCalculation * (m_npcSprite.getRotation()));
-		m_target.x += wanderRadius * std::cos(m_radianCalculation * (targetOrientation));
-		m_target.y += wanderRadius * std::sin(m_radianCalculation * (targetOrientation));
-		m_npcSprite.setRotation(face(m_target));
-
-		m_velocity.x = std::cos(m_radianCalculation * (m_npcSprite.getRotation())) * m_speed;
-		m_velocity.y = std::sin(m_radianCalculation * (m_npcSprite.getRotation())) * m_speed;
+//		//m_npcSprite.setRotation(getNewOrientation());
+//		//m_npcSprite.setRotation(m_npcSprite.getRotation() + 5 * (std::rand() % 5 - 2));
+//		//m_velocity = { std::cos(m_radianCalculation * (m_npcSprite.getRotation())) * m_speed, std::sin(m_radianCalculation * (m_npcSprite.getRotation())) * m_speed };
+//		float wanderRadius = 400;
+//		float wanderOffset = 300;
+//		float wanderOrientation = 0;
+//
+//		wanderOrientation += (std::rand() % 3 - 1) * 2;
+//		float targetOrientation = wanderOrientation + m_npcSprite.getRotation();
+//		m_target.x = m_npcSprite.getPosition().x + wanderOffset * std::cos(m_radianCalculation * (m_npcSprite.getRotation()));
+//		m_target.y = m_npcSprite.getPosition().y + wanderOffset * std::sin(m_radianCalculation * (m_npcSprite.getRotation()));
+//		m_target.x += wanderRadius * std::cos(m_radianCalculation * (targetOrientation));
+//		m_target.y += wanderRadius * std::sin(m_radianCalculation * (targetOrientation));
+//		m_npcSprite.setRotation(face(m_target));
+//
+//		m_velocity.x = std::cos(m_radianCalculation * (m_npcSprite.getRotation())) * m_speed;
+//		m_velocity.y = std::sin(m_radianCalculation * (m_npcSprite.getRotation())) * m_speed;
 
 }
 
 void NPC::normalize()
 {
-	float length = sqrt((m_velocity.x * m_velocity.x) + (m_velocity.y * m_velocity.y));
-	m_velocity = { m_velocity.x / length, m_velocity.y / length };
+	float length = sqrt((m_direction.x * m_direction.x) + (m_direction.y * m_direction.y));
+	m_direction = { m_direction.x / length, m_direction.y / length };
 }
 
 float NPC::getNewOrientation()

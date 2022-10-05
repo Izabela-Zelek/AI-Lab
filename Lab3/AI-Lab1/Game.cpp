@@ -9,8 +9,8 @@ Game::Game() :
 	initBG();
 	m_player.initialize();
 	//m_seekNpc.initialize(0);
-	//m_fleeNpc.initialize(1);
-	m_wanderNpc.initialize(2);
+	m_fleeNpc.initialize(1);
+	//m_wanderNpc.initialize(2);
 }
 
 Game::~Game()
