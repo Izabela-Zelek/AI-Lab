@@ -49,7 +49,7 @@ void NPC::initialize(int enemyType)
 /// </summary>
 void NPC::update(sf::Vector2f t_targetPos)
 {
-	/*switch (m_npcType)
+	switch (m_npcType)
 	{
 	case Type::SEEK:
 		seek(t_targetPos);
@@ -63,9 +63,9 @@ void NPC::update(sf::Vector2f t_targetPos)
 		break;
 	default:
 		break;
-	}*/
+	}
 	
-	//m_npcSprite.setPosition(m_npcSprite.getPosition() + m_velocity);
+	m_npcSprite.setPosition(m_npcSprite.getPosition() + m_velocity);
 	
 	setVisionCone(t_targetPos);
 	checkBoundary();
@@ -162,24 +162,23 @@ void NPC::flee(sf::Vector2f t_targetPos)
 
 void NPC::wander()
 {
-		m_npcSprite.setRotation(getNewOrientation());
-		m_npcSprite.setRotation(m_npcSprite.getRotation() + 5 * (std::rand() % 5 - 2));
-		m_velocity = { std::cos(m_radianCalculation * (m_npcSprite.getRotation())) * m_speed, std::sin(m_radianCalculation * (m_npcSprite.getRotation())) * m_speed };
-		float wanderRadius = 150;
-		float wanderOffset = 200;
+		//m_npcSprite.setRotation(getNewOrientation());
+		//m_npcSprite.setRotation(m_npcSprite.getRotation() + 5 * (std::rand() % 5 - 2));
+		//m_velocity = { std::cos(m_radianCalculation * (m_npcSprite.getRotation())) * m_speed, std::sin(m_radianCalculation * (m_npcSprite.getRotation())) * m_speed };
+		float wanderRadius = 1000;
+		float wanderOffset = 100;
+		float wanderOrientation = 0;
 
-		float wanderOrientation = m_npcSprite.getRotation() + ((std::rand() % 3 - 1) * 5);
+		wanderOrientation += (std::rand() % 5 - 2) * 2;
 		float targetOrientation = wanderOrientation + m_npcSprite.getRotation();
-		m_target.x = m_npcSprite.getPosition().x + wanderOffset * m_velocity.x;
-		m_target.y = m_npcSprite.getPosition().y + wanderOffset * m_velocity.y;
-		//wanderOrientation += random(-1, +1) * wanderRate
-		//	targetOrientation = wanderOrientation + my.orientation
-			// Get the centre of the wander circle
-			//target = my.position + wanderOffset * my.orientation.asVector()
-			//target += wanderRadius * targetOrientation.asVector()
-			//steering = face.getSteering(target)
-			////Full acceleration in direction we are facing
-			//steering.linear = maxAcc * my.orientation.asVector()
+		m_target.x = m_npcSprite.getPosition().x + wanderOffset * std::cos(m_radianCalculation * (m_npcSprite.getRotation()));
+		m_target.y = m_npcSprite.getPosition().y + wanderOffset * std::sin(m_radianCalculation * (m_npcSprite.getRotation()));
+		m_target.x += wanderRadius * std::cos(m_radianCalculation * (targetOrientation));
+		m_target.y += wanderRadius * std::sin(m_radianCalculation * (targetOrientation));
+		m_npcSprite.setRotation(face(m_target));
+
+		m_velocity.x = std::cos(m_radianCalculation * (m_npcSprite.getRotation())) * m_speed;
+		m_velocity.y = std::sin(m_radianCalculation * (m_npcSprite.getRotation())) * m_speed;
 
 }
 
@@ -201,6 +200,18 @@ float NPC::getNewOrientation()
 		return m_npcSprite.getRotation();
 	}
 	
+}float NPC::face(sf::Vector2f targetPos)
+{
+	sf::Vector2f direction = targetPos - m_npcSprite.getPosition();
+	if(sqrt((direction.x * direction.x) + (direction.y * direction.y)) > 0.0f)
+	{
+		return atan2f(direction.y, direction.x) * 180.0 / 3.14f;
+		
+	}
+	else
+	{
+		return m_npcSprite.getRotation();
+	}
 }
 
 void NPC::setVisionCone(sf::Vector2f t_targetPos)

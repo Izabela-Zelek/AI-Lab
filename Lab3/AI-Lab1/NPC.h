@@ -20,6 +20,7 @@ public:
 	void wander();
 	void normalize();
 	float getNewOrientation();
+	float face(sf::Vector2f targetPos);
 	void setVisionCone(sf::Vector2f t_targetPos);
 	void checkBoundary();
 
