@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <math.h>
-enum class Type { SEEK, FLEE, WANDER };
+enum class Type { SEEK, FLEE, WANDER, ARRIVE };
 class NPC
 {
 public:
@@ -18,6 +18,7 @@ public:
 	sf::Vector2f arrive(sf::Vector2f t_targetPos);
 	sf::Vector2f flee(sf::Vector2f t_targetPos);
 	sf::Vector2f wander();
+	sf::Vector2f pursue(sf::Vector2f t_targetPos);
 	sf::Vector2f normalize(sf::Vector2f normVector);
 	float getNewOrientation();
 	float face(sf::Vector2f targetPos);
@@ -32,8 +33,9 @@ private:
 	sf::RectangleShape m_rightLine;
 
 	
-	float m_maxAcceleration = 20.0f;
-	float m_speed = 10.0f;
+	float m_maxAcceleration = 200.0f;
+	float m_speed = 50.0f;
+	float m_maxSpeed = 300.0f;
 	float m_rotation = 270.0f;
 	float m_radianCalculation = 3.1415926536 / 180;
 	float angleOfSight = 35;

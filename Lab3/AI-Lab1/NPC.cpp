@@ -24,6 +24,10 @@ void NPC::initialize(int enemyType)
 		m_npcType = Type::WANDER;
 		m_enemyTexture = "ASSETS\\IMAGES\\wanderShip.png";
 		break;
+	case 3:
+		m_npcType = Type::ARRIVE;
+		m_enemyTexture = "ASSETS\\IMAGES\\wanderShip.png";
+		break;
 	default:
 		break;
 	}
@@ -57,7 +61,6 @@ void NPC::update(sf::Vector2f t_targetPos)
 	{
 	case Type::SEEK:
 		m_velocity += seek(t_targetPos) * dt.asSeconds();
-		m_velocity += arrive(t_targetPos) * dt.asSeconds();
 		break;
 	case Type::FLEE:
 		m_velocity += flee(t_targetPos) * dt.asSeconds();
@@ -65,15 +68,18 @@ void NPC::update(sf::Vector2f t_targetPos)
 	case Type::WANDER:
 		m_velocity += wander() * dt.asSeconds();
 		break;
+	case Type::ARRIVE:
+		m_velocity += arrive(t_targetPos) * dt.asSeconds();
+		break;
 	default:
 		break;
 	}
 
-	//m_npcSprite.rotate(m_angularVelocity * dt.asSeconds());
-
-
-
-	//m_npcSprite.setPosition(m_npcSprite.getPosition() + m_velocity);
+	if (sqrt((m_velocity.x * m_velocity.x) + (m_velocity.y * m_velocity.y)) > m_maxSpeed)
+	{
+		m_velocity = normalize(m_velocity);
+		m_velocity = m_velocity * m_maxSpeed;
+	}
 	
 	setVisionCone(t_targetPos);
 	checkBoundary();
@@ -129,13 +135,13 @@ sf::Vector2f NPC::arrive(sf::Vector2f t_targetPos)
 {
 	sf::Vector2f linear;
 
-	float radius = 20.0f;
-	float slowRadius = 50.0f;
+	float radius = 50.0f;
+	float slowRadius = 100.0f;
 	float timeToTarget = 0.1f;
 	float targetSpeed;
 
-	sf::Vector2f direction = t_targetPos - m_npcSprite.getPosition();
-	float distance = sqrt((direction.x * direction.x) + (direction.y * direction.y));
+	m_direction = t_targetPos - m_npcSprite.getPosition();
+	float distance = sqrt((m_direction.x * m_direction.x) + (m_direction.y * m_direction.y));
 
 	if (distance < radius)
 	{
@@ -143,15 +149,19 @@ sf::Vector2f NPC::arrive(sf::Vector2f t_targetPos)
 	}
 
 	if (distance > slowRadius)
+	{
 		targetSpeed = m_speed;
+	}
 	else
+	{
 		targetSpeed = m_speed * distance / slowRadius;
+	}
 
-	normalize(m_direction);
+	m_direction = normalize(m_direction);
 	m_direction *= targetSpeed;
 
 	linear = m_direction - m_velocity;
-	linear /= timeToTarget;
+	linear = linear / timeToTarget;
 
 
 	if (sqrt((linear.x * linear.x) + (linear.y * linear.y)) > m_maxAcceleration)
@@ -195,6 +205,23 @@ sf::Vector2f NPC::wander()
 		linear.y = std::sin(m_radianCalculation * (m_npcSprite.getRotation())) * m_maxAcceleration;
 
 		return linear;
+
+}
+
+sf::Vector2f NPC::pursue(sf::Vector2f t_targetPos)
+{
+	/*m_direction = t_targetPos - m_npcSprite.getPosition();
+	float distance = sqrt((m_direction.x * m_direction.x) + (m_direction.y * m_direction.y));;
+		speed = my.velocity.length
+		if speed <= distance / maxTimePrediction:
+	timePrediction = maxTimeprediction
+		else:
+	timePrediction = distance / speed
+		newtarget.position = target.position + target.velocity * timePrediction
+		seek(me, newTarget)
+
+		or if we encapsulate this code in a Pursue function :
+	return seek(me, newTarget)*/
 
 }
 

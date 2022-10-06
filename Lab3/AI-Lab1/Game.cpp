@@ -10,7 +10,8 @@ Game::Game() :
 	m_player.initialize();
 	//m_seekNpc.initialize(0);
 	//m_fleeNpc.initialize(1);
-	m_wanderNpc.initialize(2);
+	//m_wanderNpc.initialize(2);
+	m_arriveNpc.initialize(3);
 }
 
 Game::~Game()
@@ -76,6 +77,7 @@ void Game::update(sf::Time t_deltaTime)
 	m_seekNpc.update(m_player.getPlayerPos());
 	m_fleeNpc.update(m_player.getPlayerPos());
 	m_wanderNpc.update(m_player.getPlayerPos());
+	m_arriveNpc.update(m_player.getPlayerPos());
 }
 
 void Game::render()
@@ -86,6 +88,7 @@ void Game::render()
 	m_seekNpc.draw(m_window);
 	m_fleeNpc.draw(m_window);
 	m_wanderNpc.draw(m_window);
+	m_arriveNpc.draw(m_window);
 	m_window.display();
 }
 
