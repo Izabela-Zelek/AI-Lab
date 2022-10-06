@@ -32,6 +32,10 @@ void NPC::initialize(int enemyType)
 		m_npcType = Type::PURSUE;
 		m_enemyTexture = "ASSETS\\IMAGES\\wanderShip.png";
 		break;
+	case 5:
+		m_npcType = Type::OTHERARRIVE;
+		m_enemyTexture = "ASSETS\\IMAGES\\wanderShip.png";
+		break;
 	default:
 		break;
 	}
@@ -73,10 +77,29 @@ void NPC::update(sf::Vector2f t_targetPos,sf::Vector2f t_targetVelocity)
 		m_velocity += wander() * dt.asSeconds();
 		break;
 	case Type::ARRIVE:
-		m_velocity += arrive(t_targetPos) * dt.asSeconds();
+		m_speed = 50.0f;
+		if (arrive(t_targetPos).x != 0.0f && arrive(t_targetPos).y != 0.0f)
+		{
+			m_velocity += arrive(t_targetPos) * dt.asSeconds();
+		}
+		else
+		{
+			m_velocity = { 0.0f, 0.0f };
+		}
 		break;
 	case Type::PURSUE:
 		m_velocity += pursue(t_targetPos,t_targetPos) * dt.asSeconds();
+		break;	
+	case Type::OTHERARRIVE:
+		m_speed = 100.0f;
+		if(arrive(t_targetPos).x != 0.0f && arrive(t_targetPos).y != 0.0f)
+		{
+			m_velocity += arrive(t_targetPos) * dt.asSeconds();
+		}
+		else
+		{
+			m_velocity = {0.0f, 0.0f };
+		}
 		break;
 	default:
 		break;
@@ -142,8 +165,8 @@ sf::Vector2f NPC::arrive(sf::Vector2f t_targetPos)
 {
 	sf::Vector2f linear;
 
-	float radius = 50.0f;
-	float slowRadius = 100.0f;
+	float radius = 10.0f;
+	float slowRadius = 50.0f;
 	float timeToTarget = 0.1f;
 	float targetSpeed;
 

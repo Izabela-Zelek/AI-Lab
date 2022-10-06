@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <math.h>
-enum class Type { SEEK, FLEE, WANDER, ARRIVE, PURSUE };
+enum class Type { SEEK, FLEE, WANDER, ARRIVE, PURSUE, OTHERARRIVE };
 class NPC
 {
 public:

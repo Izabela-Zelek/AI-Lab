@@ -35,6 +35,7 @@ private:
 	NPC m_fleeNpc;
 	NPC m_wanderNpc;
 	NPC m_arriveNpc;
+	NPC m_otherArriveNpc;
 	NPC m_pursueNpc;
 
 	bool m_exitGame;
