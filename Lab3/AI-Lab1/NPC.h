@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <math.h>
-enum class Type { SEEK, FLEE, WANDER, ARRIVE };
+enum class Type { SEEK, FLEE, WANDER, ARRIVE, PURSUE };
 class NPC
 {
 public:
@@ -12,13 +12,13 @@ public:
 	~NPC();
 
 	void initialize(int enemyType);
-	void update(sf::Vector2f t_targetPos);
+	void update(sf::Vector2f t_targetPos, sf::Vector2f t_targetVelocity);
 	void draw(sf::RenderWindow& t_window);
 	sf::Vector2f seek(sf::Vector2f t_targetPosition);
 	sf::Vector2f arrive(sf::Vector2f t_targetPos);
 	sf::Vector2f flee(sf::Vector2f t_targetPos);
 	sf::Vector2f wander();
-	sf::Vector2f pursue(sf::Vector2f t_targetPos);
+	sf::Vector2f pursue(sf::Vector2f t_targetPos, sf::Vector2f t_targetVelocity);
 	sf::Vector2f normalize(sf::Vector2f normVector);
 	float getNewOrientation();
 	float face(sf::Vector2f targetPos);

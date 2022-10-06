@@ -28,6 +28,10 @@ void NPC::initialize(int enemyType)
 		m_npcType = Type::ARRIVE;
 		m_enemyTexture = "ASSETS\\IMAGES\\wanderShip.png";
 		break;
+	case 4:
+		m_npcType = Type::PURSUE;
+		m_enemyTexture = "ASSETS\\IMAGES\\wanderShip.png";
+		break;
 	default:
 		break;
 	}
@@ -53,7 +57,7 @@ void NPC::initialize(int enemyType)
 /// Grabs enemy rotation (degrees), turns to radians and gets facing direction
 /// Then moves enemy in facing direction
 /// </summary>
-void NPC::update(sf::Vector2f t_targetPos)
+void NPC::update(sf::Vector2f t_targetPos,sf::Vector2f t_targetVelocity)
 {
 	m_npcSprite.move(m_velocity * dt.asSeconds());
 
@@ -70,6 +74,9 @@ void NPC::update(sf::Vector2f t_targetPos)
 		break;
 	case Type::ARRIVE:
 		m_velocity += arrive(t_targetPos) * dt.asSeconds();
+		break;
+	case Type::PURSUE:
+		m_velocity += pursue(t_targetPos,t_targetPos) * dt.asSeconds();
 		break;
 	default:
 		break;
@@ -208,21 +215,27 @@ sf::Vector2f NPC::wander()
 
 }
 
-sf::Vector2f NPC::pursue(sf::Vector2f t_targetPos)
+sf::Vector2f NPC::pursue(sf::Vector2f t_targetPos, sf::Vector2f t_targetVelocity)
 {
-	/*m_direction = t_targetPos - m_npcSprite.getPosition();
-	float distance = sqrt((m_direction.x * m_direction.x) + (m_direction.y * m_direction.y));;
-		speed = my.velocity.length
-		if speed <= distance / maxTimePrediction:
-	timePrediction = maxTimeprediction
-		else:
-	timePrediction = distance / speed
-		newtarget.position = target.position + target.velocity * timePrediction
-		seek(me, newTarget)
+	float maxTimePrediction = 0.9f;
+	float timePrediction;
+	sf::Vector2f newtarget;
 
-		or if we encapsulate this code in a Pursue function :
-	return seek(me, newTarget)*/
-
+	m_direction = t_targetPos - m_npcSprite.getPosition();
+	float distance = sqrt((m_direction.x * m_direction.x) + (m_direction.y * m_direction.y));
+	m_speed = sqrt((m_velocity.x * m_velocity.x) + (m_velocity.y * m_velocity.y));
+		
+	if (m_speed <= distance / maxTimePrediction)
+	{
+		timePrediction = maxTimePrediction;
+	}
+	else
+	{
+		timePrediction = distance / m_speed;
+	}
+	newtarget = t_targetPos + t_targetVelocity * timePrediction;
+	
+	return seek(newtarget);
 }
 
 sf::Vector2f NPC::normalize(sf::Vector2f normVector)

@@ -17,6 +17,7 @@ public:
 	void checkBoundary();
 
 	sf::Vector2f getPlayerPos() { return m_playerSprite.getPosition(); }
+	sf::Vector2f getPlayerVelocity() { return m_velocity; }
 
 private:
 
