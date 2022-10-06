@@ -8,33 +8,40 @@ NPC::~NPC()
 {
 }
 
-void NPC::initialize(int enemyType)
+void NPC::initialize(int enemyType, sf::Font& t_font)
 {
 	switch (enemyType)
 	{
 	case 0:
-		m_npcType = Type::SEEK;
-		m_enemyTexture = "ASSETS\\IMAGES\\enemyShip.png";
-		break;
-	case 1:
 		m_npcType = Type::FLEE;
 		m_enemyTexture = "ASSETS\\IMAGES\\fleeShip.png";
+		m_enemyTitleText = "Flee";
+		break;
+	case 1:
+		m_npcType = Type::SEEK;
+		m_enemyTexture = "ASSETS\\IMAGES\\enemyShip.png";
+		m_enemyTitleText = "Seek";
 		break;
 	case 2:
 		m_npcType = Type::WANDER;
 		m_enemyTexture = "ASSETS\\IMAGES\\wanderShip.png";
+		m_enemyTitleText = "Wander";
+
 		break;
 	case 3:
 		m_npcType = Type::ARRIVE;
 		m_enemyTexture = "ASSETS\\IMAGES\\wanderShip.png";
+		m_enemyTitleText = "Slow Arrive";
 		break;
 	case 4:
 		m_npcType = Type::PURSUE;
 		m_enemyTexture = "ASSETS\\IMAGES\\wanderShip.png";
+		m_enemyTitleText = "Pursue";
 		break;
 	case 5:
 		m_npcType = Type::OTHERARRIVE;
 		m_enemyTexture = "ASSETS\\IMAGES\\wanderShip.png";
+		m_enemyTitleText = "Fast Arrive";
 		break;
 	default:
 		break;
@@ -54,16 +61,18 @@ void NPC::initialize(int enemyType)
 	m_rightLine.setSize({ 200,1 });
 	m_rightLine.setFillColor(sf::Color::Green);
 
+	m_title.setFont(t_font);
+	m_title.setString(m_enemyTitleText);
+	m_title.setCharacterSize(20);
+	m_title.setOrigin(m_title.getLocalBounds().width / 2, m_title.getLocalBounds().height / 2);
+	m_title.setPosition(m_npcSprite.getPosition().x, m_npcSprite.getPosition().y - 70);
+
 	dt = clock.getElapsedTime();
 }
-
-/// <summary>
-/// Grabs enemy rotation (degrees), turns to radians and gets facing direction
-/// Then moves enemy in facing direction
-/// </summary>
 void NPC::update(sf::Vector2f t_targetPos,sf::Vector2f t_targetVelocity)
 {
 	m_npcSprite.move(m_velocity * dt.asSeconds());
+	m_npcSprite.setRotation(getNewOrientation());
 
 	switch (m_npcType)
 	{
@@ -89,6 +98,7 @@ void NPC::update(sf::Vector2f t_targetPos,sf::Vector2f t_targetVelocity)
 		break;
 	case Type::PURSUE:
 		m_velocity += pursue(t_targetPos,t_targetPos) * dt.asSeconds();
+
 		break;	
 	case Type::OTHERARRIVE:
 		m_speed = 100.0f;
@@ -110,9 +120,9 @@ void NPC::update(sf::Vector2f t_targetPos,sf::Vector2f t_targetVelocity)
 		m_velocity = normalize(m_velocity);
 		m_velocity = m_velocity * m_maxSpeed;
 	}
-	
 	setVisionCone(t_targetPos);
 	checkBoundary();
+	m_title.setPosition(m_npcSprite.getPosition().x, m_npcSprite.getPosition().y - 70);
 
 }
 
@@ -121,6 +131,7 @@ void NPC::draw(sf::RenderWindow& t_window)
 	t_window.draw(m_leftLine);
 	t_window.draw(m_rightLine);
 	t_window.draw(m_npcSprite);
+	t_window.draw(m_title);
 }
 
 /// <summary>
@@ -229,7 +240,7 @@ sf::Vector2f NPC::wander()
 		m_target.x += wanderRadius * std::cos(m_radianCalculation * (targetOrientation));
 		m_target.y += wanderRadius * std::sin(m_radianCalculation * (targetOrientation));
 
-		m_npcSprite.setRotation(face(m_target));
+		m_npcSprite.setRotation(getNewOrientation());
 
 		linear.x = std::cos(m_radianCalculation * (m_npcSprite.getRotation())) * m_maxAcceleration;
 		linear.y = std::sin(m_radianCalculation * (m_npcSprite.getRotation())) * m_maxAcceleration;
@@ -240,7 +251,7 @@ sf::Vector2f NPC::wander()
 
 sf::Vector2f NPC::pursue(sf::Vector2f t_targetPos, sf::Vector2f t_targetVelocity)
 {
-	float maxTimePrediction = 0.9f;
+	float maxTimePrediction = 0.1f;
 	float timePrediction;
 	sf::Vector2f newtarget;
 
@@ -278,20 +289,56 @@ float NPC::getNewOrientation()
 	{
 		return m_npcSprite.getRotation();
 	}
-	
-}float NPC::face(sf::Vector2f targetPos)
+
+//TWAS A FAIL, I'M AFRAID
+//
+}/*float NPC::face(sf::Vector2f targetPos)
 {
-	sf::Vector2f direction = targetPos - m_npcSprite.getPosition();
-	if(sqrt((direction.x * direction.x) + (direction.y * direction.y)) > 0.0f)
+	float targerOr;
+
+	targerOr = atan2f(m_velocity.y, m_velocity.x) * 180.0 / 3.14f;
+	return align(targerOr);
+}
+
+float NPC::align(float targetRot)
+{
+	float targetRotation;
+	float targetRadius = 250.0f;
+	float slowRadius = 150.0f;
+	float maxRotation = 30.0f;
+	float timeToTarget = 0.1f;
+	float angularAbs = 0.0f;
+	float angular = 0.0f;
+	float maxAngular = 360.0f;
+	float maxAngularAcc = 10.0f;
+
+	float rotation = targetRot - m_npcSprite.getRotation();
+	rotation = atan2(::sin(rotation), ::cos(rotation));
+	float rotationSize = abs(rotation);
+
+	if (rotationSize < targetRadius)
 	{
-		return atan2f(direction.y, direction.x) * 180.0 / 3.14f;
-		
+		targetRotation = 0;
+	}
+	else if (rotationSize > slowRadius)
+	{
+		targetRotation = maxRotation;
 	}
 	else
 	{
-		return m_npcSprite.getRotation();
+		targetRotation = maxRotation * (rotationSize / slowRadius);
+		angular = targetRotation - m_npcSprite.getRotation();
+		angular = angular / timeToTarget;
+		angularAbs = abs(angular);
 	}
-}
+	if (angularAbs > maxAngular)
+	{
+		angular = angular / angularAbs;
+		angular = angular * maxAngularAcc;
+	}
+	return angular;
+
+}*/
 
 void NPC::setVisionCone(sf::Vector2f t_targetPos)
 {
@@ -300,19 +347,26 @@ void NPC::setVisionCone(sf::Vector2f t_targetPos)
 	m_leftLine.setPosition(m_npcSprite.getPosition());
 	m_rightLine.setPosition(m_npcSprite.getPosition());
 
-	sf::Vector2f targetDirection = {t_targetPos.x - m_npcSprite.getPosition().x,t_targetPos.y - m_npcSprite.getPosition().y};
-	sf::Vector2f orientation = { std::cos(m_radianCalculation * (m_npcSprite.getRotation())), -std::sin(m_radianCalculation * (m_npcSprite.getRotation())) };
-	float dotProduct = (targetDirection.x * orientation.x) + (targetDirection.y * orientation.y);
+	sf::Vector2f orientation = {std::cos(m_radianCalculation * m_npcSprite.getRotation()),std::sin( m_radianCalculation *  m_npcSprite.getRotation())};
+	sf::Vector2f distance = t_targetPos - m_npcSprite.getPosition();
+	distance = normalize(distance);
 
-	if (dotProduct >= 360)
+	float dotProduct = (orientation.x * distance.x) + (orientation.y * distance.y);
+
+
+	if (dotProduct > std::cos(angleOfSight * 2))
 	{
-		dotProduct = dotProduct - 360;
-	}
-	std::cout << dotProduct <<std::endl;
-	if (dotProduct < angleOfSight)
-	{
-		m_leftLine.setFillColor(sf::Color::Red);
-		m_rightLine.setFillColor(sf::Color::Red);
+		if (sqrt((t_targetPos.x - m_npcSprite.getPosition().x) * (t_targetPos.x - m_npcSprite.getPosition().x) + (t_targetPos.y - m_npcSprite.getPosition().y) * (t_targetPos.y - m_npcSprite.getPosition().y)) <= 200.0f)
+		{
+			m_leftLine.setFillColor(sf::Color::Red);
+			m_rightLine.setFillColor(sf::Color::Red);
+		}
+		
+		else
+		{
+			m_leftLine.setFillColor(sf::Color::Green);
+			m_rightLine.setFillColor(sf::Color::Green);
+		}
 	}
 	else
 	{

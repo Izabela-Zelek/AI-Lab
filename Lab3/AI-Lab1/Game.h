@@ -1,4 +1,4 @@
-
+﻿
 #ifndef GAME_HPP
 #define GAME_HPP
 
@@ -26,7 +26,9 @@ private:
 
 	sf::Texture m_bgTexture;
 	sf::Sprite m_bgSprite;
-
+	sf::Font m_font;
+	sf::Text m_instructions;
+	std::string m_instrucText= "Toggle enemies by using numpad:\n1 - Seek\n2 - Wander\n3 - Slow Arrive\n4 - Pursue\n5 - Fast Arrive";
 
 	sf::Vector2f m_pos = { sf::VideoMode::getDesktopMode().width / 2,sf::VideoMode::getDesktopMode().height / 2 }; 	//defines centre of screen, considering screen size
 
@@ -39,6 +41,10 @@ private:
 	NPC m_pursueNpc;
 
 	bool m_exitGame;
+	int m_instrucOffset = 20;
+	static const int NUM_ENEMY = 5;
+
+	bool EnemyAlive[NUM_ENEMY] = {true,true,true,true,true};
 };
 
 #endif

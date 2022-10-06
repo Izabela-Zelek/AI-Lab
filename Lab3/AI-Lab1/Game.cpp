@@ -8,12 +8,12 @@ Game::Game() :
 	std::srand(time(NULL));
 	initBG();
 	m_player.initialize();
-	//m_seekNpc.initialize(0);
-	//m_fleeNpc.initialize(1); //FROM OLD PROJECT
-	//m_wanderNpc.initialize(2);
-	m_arriveNpc.initialize(3);
-	//m_pursueNpc.initialize(4);
-	m_otherArriveNpc.initialize(5);
+	m_seekNpc.initialize(1,m_font);
+	//m_fleeNpc.initialize(0,m_font); //FROM OLD PROJECT
+	m_wanderNpc.initialize(2,m_font);
+	m_arriveNpc.initialize(3, m_font);
+	m_pursueNpc.initialize(4,m_font);
+	m_otherArriveNpc.initialize(5, m_font);
 }
 
 Game::~Game()
@@ -63,6 +63,26 @@ void Game::processKeys(sf::Event t_event)
 	{
 		m_exitGame = true;
 	}
+	switch (t_event.key.code)
+	{
+	case sf::Keyboard::Num1:
+		EnemyAlive[0] = !EnemyAlive[0];
+		break;	
+	case sf::Keyboard::Num2:
+		EnemyAlive[1] = !EnemyAlive[1];
+		break;	
+	case sf::Keyboard::Num3:
+		EnemyAlive[2] = !EnemyAlive[2];
+		break;	
+	case sf::Keyboard::Num4:
+		EnemyAlive[3] = !EnemyAlive[3];
+		break;	
+	case sf::Keyboard::Num5:
+		EnemyAlive[4] = !EnemyAlive[4];
+		break;
+	default:
+		break;
+	}
 
 	m_player.getInput();
 }
@@ -76,25 +96,63 @@ void Game::update(sf::Time t_deltaTime)
 	}
 
 	m_player.update();
-	m_seekNpc.update(m_player.getPlayerPos(),m_player.getPlayerVelocity());
-	m_fleeNpc.update(m_player.getPlayerPos(),m_player.getPlayerVelocity());
-	m_wanderNpc.update(m_player.getPlayerPos(), m_player.getPlayerVelocity());
-	m_arriveNpc.update(m_player.getPlayerPos(), m_player.getPlayerVelocity());
-	m_otherArriveNpc.update(m_player.getPlayerPos(), m_player.getPlayerVelocity());
-	m_pursueNpc.update(m_player.getPlayerPos(), m_player.getPlayerVelocity());
+	
+	if(EnemyAlive[0])
+	{
+		m_seekNpc.update(m_player.getPlayerPos(), m_player.getPlayerVelocity());
+	}
+	if(EnemyAlive[1])
+	{
+		m_wanderNpc.update(m_player.getPlayerPos(), m_player.getPlayerVelocity());
+	}
+	if (EnemyAlive[2])
+	{
+		m_arriveNpc.update(m_player.getPlayerPos(), m_player.getPlayerVelocity());
+	}
+	if (EnemyAlive[3])
+	{
+		m_pursueNpc.update(m_player.getPlayerPos(), m_player.getPlayerVelocity());
+	}
+	if (EnemyAlive[4])
+	{
+		m_otherArriveNpc.update(m_player.getPlayerPos(), m_player.getPlayerVelocity());
+	}
+
+	//m_fleeNpc.update(m_player.getPlayerPos(),m_player.getPlayerVelocity());
+
 }
 
 void Game::render()
 {
 	m_window.clear(sf::Color::Black);
 	m_window.draw(m_bgSprite);
+
 	m_player.draw(m_window);
-	m_seekNpc.draw(m_window);
-	m_fleeNpc.draw(m_window);
-	m_wanderNpc.draw(m_window);
-	m_arriveNpc.draw(m_window);
-	m_otherArriveNpc.draw(m_window);
-	m_pursueNpc.draw(m_window);
+
+
+	if (EnemyAlive[0])
+	{
+		m_seekNpc.draw(m_window);
+	}
+	if (EnemyAlive[1])
+	{
+		m_wanderNpc.draw(m_window);
+	}
+	if (EnemyAlive[2])
+	{
+		m_arriveNpc.draw(m_window);
+	}
+	if (EnemyAlive[3])
+	{
+		m_pursueNpc.draw(m_window);
+	}
+	if (EnemyAlive[4])
+	{
+		m_otherArriveNpc.draw(m_window);
+	}
+	//m_fleeNpc.draw(m_window);
+
+	m_window.draw(m_instructions);
 
 	m_window.display();
 }
@@ -112,4 +170,16 @@ void Game::initBG()
 	m_bgSprite.setScale(sf::VideoMode::getDesktopMode().width / m_bgSprite.getGlobalBounds().width, sf::VideoMode::getDesktopMode().height / m_bgSprite.getGlobalBounds().height);
 	m_bgSprite.setOrigin(m_bgSprite.getLocalBounds().width / 2, m_bgSprite.getLocalBounds().height / 2);
 	m_bgSprite.setPosition(m_pos);
+
+	if (!m_font.loadFromFile("ASSETS\\FONTS\\ariblk.ttf"))
+	{
+		std::cout << "problem loading font" << std::endl;
+	}
+
+	m_instructions.setFont(m_font);
+	m_instructions.setString(m_instrucText);
+	m_instructions.setCharacterSize(20);
+	m_instructions.setOrigin(m_instructions.getLocalBounds().width / 2, m_instructions.getLocalBounds().height / 2);
+	m_instructions.setPosition(m_instrucOffset + (m_instructions.getLocalBounds().width /2), m_instrucOffset + (m_instructions.getLocalBounds().height / 2));
+
 }
