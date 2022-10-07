@@ -237,7 +237,7 @@ sf::Vector2f NPC::wander()
 	float wanderOffset = 30;
 	float wanderOrientation = 0;
 
-	wanderOrientation += (std::rand() % 5 - 2) * 500.0f;
+	wanderOrientation += (std::rand() % 7 - 3) * 500.0f;
 
 	float targetOrientation = wanderOrientation + m_npcSprite.getRotation();
 	m_target.x = m_npcSprite.getPosition().x + wanderOffset * std::cos(m_radianCalculation * (m_npcSprite.getRotation()));
