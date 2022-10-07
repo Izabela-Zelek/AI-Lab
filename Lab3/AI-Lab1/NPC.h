@@ -20,11 +20,11 @@ public:
 	sf::Vector2f wander();
 	sf::Vector2f pursue(sf::Vector2f t_targetPos, sf::Vector2f t_targetVelocity);
 	sf::Vector2f normalize(sf::Vector2f normVector);
-	float getNewOrientation();
+	float getNewOrientation(sf::Vector2f t_dir);
 
 	//TWAS A FAIL, I'M AFRAID
-	//float face(sf::Vector2f targetPos);
-	//float align(float targetRot);
+	//float face(sf::vector2f targetpos);
+	//float align(float targetrot);
 
 	void setVisionCone(sf::Vector2f t_targetPos);
 	void checkBoundary();
@@ -37,10 +37,10 @@ private:
 	sf::RectangleShape m_rightLine;
 
 	
-	float m_maxAcceleration = 66.6f;	//prev 200
+	float m_maxAcceleration = 200.0f;	//prev 200
 	float m_speed = 50.0f;
-	float m_maxSpeed = 100.0f; //prev 300
-	float m_rotation = 90.0f; //prev 270
+	float m_maxSpeed = 300.0f; //prev 300
+	float m_rotation = 270.0f; //prev 270
 	float m_radianCalculation = 3.1415926536 / 180;
 	float angleOfSight = 35;
 	float m_angularVelocity;

@@ -30,17 +30,17 @@ void NPC::initialize(int enemyType, sf::Font& t_font)
 		break;
 	case 3:
 		m_npcType = Type::ARRIVE;
-		m_enemyTexture = "ASSETS\\IMAGES\\wanderShip.png";
+		m_enemyTexture = "ASSETS\\IMAGES\\arriveShip.png";
 		m_enemyTitleText = "Slow Arrive";
 		break;
 	case 4:
 		m_npcType = Type::PURSUE;
-		m_enemyTexture = "ASSETS\\IMAGES\\wanderShip.png";
+		m_enemyTexture = "ASSETS\\IMAGES\\pursueShip.png";
 		m_enemyTitleText = "Pursue";
 		break;
 	case 5:
 		m_npcType = Type::OTHERARRIVE;
-		m_enemyTexture = "ASSETS\\IMAGES\\wanderShip.png";
+		m_enemyTexture = "ASSETS\\IMAGES\\fastArriveShip.png";
 		m_enemyTitleText = "Fast Arrive";
 		break;
 	default:
@@ -68,11 +68,16 @@ void NPC::initialize(int enemyType, sf::Font& t_font)
 	m_title.setPosition(m_npcSprite.getPosition().x, m_npcSprite.getPosition().y - 70);
 
 	dt = clock.getElapsedTime();
+
+	if (m_npcType == Type::WANDER)
+	{
+		m_npcSprite.setRotation(std::rand() % 360);
+	}
 }
 void NPC::update(sf::Vector2f t_targetPos,sf::Vector2f t_targetVelocity)
 {
 	m_npcSprite.move(m_velocity * dt.asSeconds());
-	m_npcSprite.setRotation(getNewOrientation());
+	m_npcSprite.setRotation(getNewOrientation(m_velocity));
 
 	switch (m_npcType)
 	{
@@ -87,26 +92,25 @@ void NPC::update(sf::Vector2f t_targetPos,sf::Vector2f t_targetVelocity)
 		break;
 	case Type::ARRIVE:
 		m_speed = 50.0f;
-		if (arrive(t_targetPos).x != 0.0f && arrive(t_targetPos).y != 0.0f)
+		if (arrive(t_targetPos).x != 0.0f || arrive(t_targetPos).y != 0.0f)
 		{
 			m_velocity += arrive(t_targetPos) * dt.asSeconds();
 		}
-		else
+		else if (arrive(t_targetPos).x == 0.0f && arrive(t_targetPos).y == 0.0f)
 		{
 			m_velocity = { 0.0f, 0.0f };
 		}
 		break;
 	case Type::PURSUE:
 		m_velocity += pursue(t_targetPos,t_targetPos) * dt.asSeconds();
-
 		break;	
 	case Type::OTHERARRIVE:
-		m_speed = 100.0f;
-		if(arrive(t_targetPos).x != 0.0f && arrive(t_targetPos).y != 0.0f)
+		m_speed = 150.0f;
+		if(arrive(t_targetPos).x != 0.0f || arrive(t_targetPos).y != 0.0f)
 		{
 			m_velocity += arrive(t_targetPos) * dt.asSeconds();
 		}
-		else
+		else if (arrive(t_targetPos).x == 0.0f && arrive(t_targetPos).y == 0.0f)
 		{
 			m_velocity = {0.0f, 0.0f };
 		}
@@ -229,24 +233,24 @@ sf::Vector2f NPC::wander()
 {
 	sf::Vector2f linear;
 
-		float wanderRadius = 400;
-		float wanderOffset = 300;
-		float wanderOrientation = 0;
+	float wanderRadius = 30;
+	float wanderOffset = 30;
+	float wanderOrientation = 0;
 
-		wanderOrientation += (std::rand() % 3 - 1) * 2;
-		float targetOrientation = wanderOrientation + m_npcSprite.getRotation();
-		m_target.x = m_npcSprite.getPosition().x + wanderOffset * std::cos(m_radianCalculation * (m_npcSprite.getRotation()));
-		m_target.y = m_npcSprite.getPosition().y + wanderOffset * std::sin(m_radianCalculation * (m_npcSprite.getRotation()));
-		m_target.x += wanderRadius * std::cos(m_radianCalculation * (targetOrientation));
-		m_target.y += wanderRadius * std::sin(m_radianCalculation * (targetOrientation));
+	wanderOrientation += (std::rand() % 3 - 1) * 5.0f;
 
-		m_npcSprite.setRotation(getNewOrientation());
+	float targetOrientation = wanderOrientation + m_npcSprite.getRotation();
+	m_target.x = m_npcSprite.getPosition().x + wanderOffset * std::cos(m_radianCalculation * (m_npcSprite.getRotation()));
+	m_target.y = m_npcSprite.getPosition().y + wanderOffset * std::sin(m_radianCalculation * (m_npcSprite.getRotation()));
+	m_target.x += wanderRadius * std::cos(m_radianCalculation * (targetOrientation));
+	m_target.y += wanderRadius * std::sin(m_radianCalculation * (targetOrientation));
 
-		linear.x = std::cos(m_radianCalculation * (m_npcSprite.getRotation())) * m_maxAcceleration;
-		linear.y = std::sin(m_radianCalculation * (m_npcSprite.getRotation())) * m_maxAcceleration;
+	linear.x = (m_target.x - m_npcSprite.getPosition().x) * m_maxAcceleration;
+	linear.y = (m_target.y - m_npcSprite.getPosition().y) * m_maxAcceleration;
 
-		return linear;
 
+
+	return linear;
 }
 
 sf::Vector2f NPC::pursue(sf::Vector2f t_targetPos, sf::Vector2f t_targetVelocity)
@@ -278,11 +282,11 @@ sf::Vector2f NPC::normalize(sf::Vector2f normVector)
 	return { normVector.x / length, normVector.y / length };
 }
 
-float NPC::getNewOrientation()
+float NPC::getNewOrientation(sf::Vector2f t_dir)
 {
-	if(sqrt((m_velocity.x * m_velocity.x) + (m_velocity.y * m_velocity.y)) > 0.0f) 
+	if(sqrt((t_dir.x * t_dir.x) + (t_dir.y * t_dir.y)) > 0.0f)
 	{
-		return atan2f(m_velocity.y, m_velocity.x) * 180.0 / 3.14f;
+		return atan2f(t_dir.y, t_dir.x) * 180.0 / 3.14f;
 		
 	}
 	else
