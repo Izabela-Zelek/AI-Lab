@@ -237,7 +237,7 @@ sf::Vector2f NPC::wander()
 	float wanderOffset = 30;
 	float wanderOrientation = 0;
 
-	wanderOrientation += (std::rand() % 3 - 1) * 5.0f;
+	wanderOrientation += (std::rand() % 5 - 2) * 500.0f;
 
 	float targetOrientation = wanderOrientation + m_npcSprite.getRotation();
 	m_target.x = m_npcSprite.getPosition().x + wanderOffset * std::cos(m_radianCalculation * (m_npcSprite.getRotation()));
@@ -245,8 +245,8 @@ sf::Vector2f NPC::wander()
 	m_target.x += wanderRadius * std::cos(m_radianCalculation * (targetOrientation));
 	m_target.y += wanderRadius * std::sin(m_radianCalculation * (targetOrientation));
 
-	linear.x = (m_target.x - m_npcSprite.getPosition().x) * m_maxAcceleration;
-	linear.y = (m_target.y - m_npcSprite.getPosition().y) * m_maxAcceleration;
+	linear.x = std::cos(m_radianCalculation * (m_target.x - m_npcSprite.getPosition().x)) * m_maxAcceleration;
+	linear.y = std::sin(m_radianCalculation * (m_target.y - m_npcSprite.getPosition().y)) * m_maxAcceleration;
 
 
 
