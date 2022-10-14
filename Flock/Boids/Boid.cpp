@@ -252,22 +252,26 @@ void Boid::swarm(vector <Boid>& v)
 			force = force + R*U
 */
 	Pvector	R;
-	Pvector force(0, 0);
+	float A = 10;
+	float B = 1000;
+	float N = 1;
+	float M = 2;
 
 	for (int i = 0; i < v.size(); i++)
 	{
-		R.x = location.x - v[i].location.x;
-		R.y = location.y - v[i].location.y;
-		float D = R.magnitude();
-		float U = -2 / pow(D, 4) + 1 / pow(D, 2);
-		R.normalize();
-		force.x = force.x + R.x * U;
-		force.y = force.y + R.y * U;
-		
-	}
-// Your code here..
+		if (location.x != v[i].location.x || location.y != v[i].location.y)
+		{
+			R = R.subTwoVector(location, v[i].location);
+			float D = R.magnitude();
+			float U = -A / pow(D, N) + B / pow(D, M);
+			R.normalize();
+			R.mulScalar(U);
 
-	applyForce(force);
+			applyForce(R);
+
+		}
+	}
+
 	update();
 	borders();
 }
