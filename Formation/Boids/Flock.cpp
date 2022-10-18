@@ -93,3 +93,17 @@ void Flock::cFormation(int fLeader)
 		}
 	}
 }
+
+void Flock::dFormation(int fLeader)
+{
+	int pointCount = 4;
+	int fSize = flock.size();
+
+	for (int i = 0; i < fSize; i++)
+	{
+		Boid target = flock[fLeader]; // Our designated leader
+		if (i <= pointCount && i != fLeader)
+		{
+		}
+	}
+}

@@ -1,4 +1,14 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(514,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Boids.vcxproj, Swarm.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Flock.cpp
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Boid.h(48,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Boid.h(48,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Boid.h(61,50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Boid.h(61,34): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Boid.h(66,50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Boid.h(66,34): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Flock.cpp(30,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Flock.cpp(40,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Flock.cpp(50,30): warning C4305: 'initializing': truncation from 'double' to 'float'
   Game.cpp
 C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Boid.h(48,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Boid.h(48,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
@@ -32,4 +42,13 @@ C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Game.cpp(160,32): war
           ]
 C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Game.cpp(185,20): warning C4018: '<': signed/unsigned mismatch
 C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Game.cpp(197,9): warning C4101: 'theta': unreferenced local variable
+  main.cpp
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Boid.h(48,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Boid.h(48,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Boid.h(61,50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Boid.h(61,34): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Boid.h(66,50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\Boid.h(66,34): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Boids\main.cpp(38,22): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Generating Code...
   Boids.vcxproj -> C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\Formation\Debug\Formation.exe
