@@ -96,14 +96,76 @@ void Flock::cFormation(int fLeader)
 
 void Flock::dFormation(int fLeader)
 {
-	int pointCount = 4;
-	int fSize = flock.size();
-
-	for (int i = 0; i < fSize; i++)
+	if (flock.size() > 0)
 	{
+		int pointCount = 4;
+		int fSize = flock.size();
+		float droidPerSide = std::ceil((flock.size() - 5.0f) / 4.0f);
+		float lengthOfLine = std::ceil((droidPerSide * 3) + (fSize * 0.5f));
+		float distanceFromLeader = sqrt((lengthOfLine * lengthOfLine) / 2);
 		Boid target = flock[fLeader]; // Our designated leader
-		if (i <= pointCount && i != fLeader)
+
+		Pvector points[4] = { {target.location.x + distanceFromLeader, target.location.y} , {target.location.x, target.location.y + distanceFromLeader},
+			{target.location.x - distanceFromLeader, target.location.y},{target.location.x, target.location.y - distanceFromLeader} };
+
+		int closeEnough = 10;
+
+		for (int i = 0; i < fSize; i++)
 		{
+			Pvector targetSlot(0, 0);
+			Pvector	sub(0, 0);
+			Pvector sum(0, 0);
+
+			targetSlot = { 500,500 };
+			int lineCount = 0;
+			Pvector line;
+			if(i <= pointCount && i != fLeader)
+			{
+				targetSlot = points[i - 1];
+			}
+			else if(i != fLeader)
+			{
+				for (int i = 0; i < pointCount; i++)
+				{
+					if (i != pointCount - 1)
+					{
+						line.x = points[i + 1].x - points[i].x;
+						line.y = points[i + 1].y - points[i].y;
+					}
+					else
+					{
+						line.x = points[0].x - points[i].x;
+						line.y = points[0].y - points[i].y;
+					}
+
+					Pvector norm = line;
+					norm.normalize();
+					targetSlot.x = points[i].x + (line.x * norm.x);
+					targetSlot.y = points[i].y + (line.y * norm.y);
+				}
+			}
+
+			flock[i].location = targetSlot;
+
+
+			//sub = sub.subTwoVector(targetSlot, flock[i].location);
+			//float D = sub.magnitude();
+			//if (D > closeEnough)	// Are we close enough to our slot position, if so just match the leader's velocity.
+			//{
+			//	//				std::cout << "NOT close enough" << std::endl;
+			//	sum = sub;
+			//	sum.normalize();
+			//	sum.mulScalar(flock[i].maxSpeed);
+			//	flock[i].applyForce(sum);
+			//	flock[i].update("cFormation");
+			//	flock[i].borders();
+			//}
+			//else
+			//{
+			//	flock[i].velocity = flock[fLeader].velocity; //Match the leader's velocity if we are close enough
+			//	flock[i].borders();
+			//	//				std::cout << "Close enough" << flock[fLeader].velocity.magnitude() << std::endl;
+			//}
 		}
 	}
 }

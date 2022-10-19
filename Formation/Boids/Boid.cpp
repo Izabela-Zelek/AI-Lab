@@ -257,6 +257,10 @@ void Boid::update(string formation)
 			acceleration.mulScalar(0);
 		}
 	}
+	else if (formation == "dFormation")
+	{
+
+	}
 	else
 	{
 			// Update velocity
