@@ -180,7 +180,7 @@ void Flock::dFormation(int fLeader)
 				sum.normalize();
 				sum.mulScalar(flock[i].maxSpeed);
 				flock[i].applyForce(sum);
-				flock[i].update("cFormation");
+				flock[i].update("dFormation");
 				flock[i].borders();
 			}
 			else

@@ -259,7 +259,22 @@ void Boid::update(string formation)
 	}
 	else if (formation == "dFormation")
 	{
-
+		if (isLeader)
+		{
+			std::cout << "Leader velocity = " << velocity.x << ", " << velocity.y << std::endl;
+			// Update velocity
+			location.addVector(velocity);
+		}
+		else
+		{
+			// Update velocity
+			velocity.addVector(acceleration);
+			// Limit speed
+			velocity.limit(maxSpeed * 2.7f);	// Without this higher speedup, the formation members were going too slow to cath the leader and get into formation.
+			location.addVector(velocity);
+			// Reset accelertion to 0 each cycle
+			acceleration.mulScalar(0);
+		}
 	}
 	else
 	{
