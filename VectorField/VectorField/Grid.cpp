@@ -39,7 +39,7 @@ void Grid::checkMouseInput(sf::RenderWindow& t_window, bool t_leftClick)
 		{
 			if (t_leftClick)
 			{
-				if(startChosen)
+				if (startChosen)
 				{
 					m_grid[m_interactables[0]].changeColour(sf::Color(64, 11, 60));
 				}
@@ -73,17 +73,15 @@ void Grid::createCostField(int t_gridNr)
 	int cost = 0;
 	m_grid[t_gridNr].addCost(cost);
 	setVertical(t_gridNr, ROW, cost);
-	
+	setVertical(t_gridNr, -ROW, cost);
+	setHorizontal(t_gridNr, +1, cost);
+	setHorizontal(t_gridNr, -1, cost);
+
 	setCost(t_gridNr,-ROW,-1, cost );
-	setCost(t_gridNr, -ROW, 0, cost );
 	setCost(t_gridNr,-ROW,+1, cost );
 	setCost(t_gridNr,+ROW,-1, cost);
 	setCost(t_gridNr,+ROW,+1, cost );
 
-	/*setCost(t_gridNr,-ROW,0, cost + 1);
-	/*setCost(t_gridNr,+ROW,0, cost + 1);
-	setCost(t_gridNr,0,+1, cost + 1);
-	setCost(t_gridNr,0,-1, cost + 1);*/
 }
 
 void Grid::setVertical(int t_gridNr, int t_rowCalc, int t_cost)
@@ -95,6 +93,31 @@ void Grid::setVertical(int t_gridNr, int t_rowCalc, int t_cost)
 		m_grid[nr].addCost(cost);
 		nr += t_rowCalc;
 		cost++;
+	}
+}
+
+void Grid::setHorizontal(int t_gridNr, int t_colCalc, int t_cost)
+{	
+	int nr = t_gridNr + t_colCalc;
+	int cost = t_cost + 1;
+
+	if (t_colCalc > 0)
+	{
+		while (nr % 50 <= 49 && nr % 50 != 0)
+		{
+			m_grid[nr].addCost(cost);
+			nr += t_colCalc;
+			cost++;
+		}
+	}
+	else if (t_colCalc < 0)
+	{
+		while (nr % 50 != 49 && nr % 50 >= 0)
+		{
+			m_grid[nr].addCost(cost);
+			nr += t_colCalc;
+			cost++;
+		}
 	}
 }
 
@@ -111,19 +134,23 @@ void Grid::setCost(int t_gridNr,int t_rowCalc,int t_cornerCalc, int t_cost)
 	int calc = t_gridNr + t_rowCalc + t_cornerCalc;
 	if ( calc > 0 && calc < MAX_TILE && t_gridNr % 50 <= 1)
 	{
-		m_grid[calc].addCost(t_cost);
+		m_grid[calc].addCost(t_cost + 1);
+		setVertical(calc, t_rowCalc, t_cost + 1);
+		setVertical(calc, t_rowCalc, t_cost + 1);
 	}
-	else if (calc < MAX_TILE && t_gridNr % 50 >= 48)
+	else if (calc > 0 && calc < MAX_TILE && t_gridNr % 50 >= 48)
 	{
-		m_grid[calc].addCost(t_cost);
+		m_grid[calc].addCost(t_cost + 1);
+		setVertical(calc, t_rowCalc, t_cost + 1);
+		setVertical(calc, t_rowCalc, t_cost + 1);
 	}
 	else if (calc >= 0 && calc < MAX_TILE)
 	{
 		m_grid[calc].addCost(t_cost);
-		setVertical(calc, t_rowCalc, t_cost + 1);
-		setVertical(calc, t_rowCalc, t_cost + 1);
-		//setHorizontal(calc, 1, t_cost + 1);
 		setCost(calc,t_rowCalc,t_cornerCalc , t_cost + 1);
+		setVertical(calc, t_rowCalc, t_cost + 1);
+		setVertical(calc, t_rowCalc, t_cost + 1);
+		setHorizontal(calc, t_cornerCalc, t_cost + 1);
 	}
 }
 

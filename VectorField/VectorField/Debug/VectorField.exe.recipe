@@ -2,15 +2,15 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\VectorField\Debug\VectorField.exe</FullPath>
+      <FullPath>C:\Users\viole\Desktop\AI\AI-Lab\VectorField\Debug\VectorField.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\VectorField\VectorField\ASSETS\FONTS\ariblk.ttf</FullPath>
+      <FullPath>C:\Users\viole\Desktop\AI\AI-Lab\VectorField\VectorField\ASSETS\FONTS\ariblk.ttf</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\VectorField\VectorField\ASSETS\IMAGES\SFML-LOGO.png</FullPath>
+      <FullPath>C:\Users\viole\Desktop\AI\AI-Lab\VectorField\VectorField\ASSETS\IMAGES\SFML-LOGO.png</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />

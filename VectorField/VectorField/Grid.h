@@ -16,6 +16,7 @@ public:
 	void checkMouseInput(sf::RenderWindow& t_window, bool t_leftClick);
 	void createCostField(int t_gridNr);
 	void setVertical(int t_gridNr, int rowCalc, int t_cost);
+	void setHorizontal(int t_gridNr, int colCalc, int t_cost);
 	void clearCostField();
 	void setCost(int t_gridNr, int rowCalc, int cornerCalc, int t_cost);
 	void setUpFont();
@@ -28,7 +29,6 @@ private:
 	bool startChosen = false;
 	bool targetChosen = false;
 	int m_interactables[2];
-
 	std::vector<Tile> m_grid;
 	sf::Font m_font;
 

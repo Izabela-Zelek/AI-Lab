@@ -28,7 +28,7 @@ Tile::Tile(sf::Vector2f size, sf::Vector2f pos,sf::Font& t_font)
 	m_tile.setOutlineThickness(0.8f);
 
 	m_costText.setFont(t_font);
-	m_costText.setCharacterSize(20U);
+	m_costText.setCharacterSize(10U); //20U
 	m_costText.setFillColor(sf::Color::White);
 	m_costText.setPosition(m_tile.getPosition());
 }

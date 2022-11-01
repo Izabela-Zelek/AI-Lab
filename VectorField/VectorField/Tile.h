@@ -17,6 +17,7 @@ public:
 	void changeColour(sf::Color t_color);
 	void addCost(int t_cost);
 	int getCost() { return m_cost; }
+	float getXPos() { return m_tile.getPosition().x; }
 private:
 	bool m_traversable;
 	int m_cost = -1;
