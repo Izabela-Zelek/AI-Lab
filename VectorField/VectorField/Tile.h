@@ -13,18 +13,37 @@ public:
 	~Tile();
 
 	void render(sf::RenderWindow& t_window);
-	sf::FloatRect passGlobalBounds();
 	void changeColour(sf::Color t_color);
 	void addCost(int t_cost);
+	void addIntegrationField(float t_integrationField);
+	void rotateVectorField(float t_rot, bool t_target);
+	void changeMode();
+	void setBoundary();
+
+	bool getTraversable() { return m_traversable; }
+
 	int getCost() { return m_cost; }
+	int getRotation() { return m_tile.getRotation(); }
+
 	float getXPos() { return m_tile.getPosition().x; }
+	float getYPos() { return m_tile.getPosition().y; }
+	float getIntegrationField() { return integrationField; }
+
+	sf::FloatRect getGlobalBounds();
+
+
 private:
 	bool m_traversable;
 	int m_cost = -1;
 	bool m_showCost = false;
+	bool m_showCostField = true;
+	bool m_showVectorField = false;
+	float integrationField = -1;
 	sf::RectangleShape m_tile;
 
 	sf::Text m_costText;
+
+	sf::RectangleShape m_vectorLine;
 };
 
 #endif // !TILE_HPP

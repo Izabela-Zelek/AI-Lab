@@ -94,6 +94,10 @@ void Game::processKeys(sf::Event t_event)
 	{
 		m_exitGame = true;
 	}
+	if (sf::Keyboard::C == t_event.key.code)
+	{
+		m_grid.checkKeyInput();
+	}
 }
 
 void Game::processMouse(sf::Event t_event)

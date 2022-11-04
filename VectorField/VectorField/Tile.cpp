@@ -5,8 +5,9 @@ Tile::Tile(sf::Vector2f size, sf::Vector2f pos,sf::Font& t_font)
 	m_tile.setSize(size);
 	m_tile.setOrigin(m_tile.getLocalBounds().width / 2, m_tile.getLocalBounds().height / 2);
 	m_tile.setPosition(pos);
+	
 
-	if (std::rand() % 4 == 0)
+	if (std::rand() % 10 == 0)
 	{
 		m_traversable = false;
 	}
@@ -24,6 +25,7 @@ Tile::Tile(sf::Vector2f size, sf::Vector2f pos,sf::Font& t_font)
 		m_tile.setFillColor(sf::Color::Black);
 
 	}
+
 	m_tile.setOutlineColor(sf::Color(161, 138, 166));
 	m_tile.setOutlineThickness(0.8f);
 
@@ -31,6 +33,10 @@ Tile::Tile(sf::Vector2f size, sf::Vector2f pos,sf::Font& t_font)
 	m_costText.setCharacterSize(10U); //20U
 	m_costText.setFillColor(sf::Color::White);
 	m_costText.setPosition(m_tile.getPosition());
+
+	m_vectorLine.setSize({ 1.0f,1.0f });
+	m_vectorLine.setPosition(pos);
+	m_vectorLine.setFillColor(sf::Color(sf::Color::White.r, sf::Color::White.g, sf::Color::White.b, 127.5f));
 }
 
 Tile::~Tile()
@@ -40,13 +46,19 @@ Tile::~Tile()
 void Tile::render(sf::RenderWindow& t_window)
 {
 	t_window.draw(m_tile);
-	if (m_showCost)
+	if (m_showCostField && m_showCost && m_traversable)
 	{
 		t_window.draw(m_costText);
 	}
+
+	if (m_showCost && m_showVectorField && m_traversable)
+	{
+		t_window.draw(m_vectorLine);
+	}
+
 }
 
-sf::FloatRect Tile::passGlobalBounds()
+sf::FloatRect Tile::getGlobalBounds()
 {
 	return m_tile.getGlobalBounds();
 }
@@ -74,5 +86,36 @@ void Tile::addCost(int t_cost)
 	{
 		m_showCost = false;
 	}
+}
+
+void Tile::addIntegrationField(float t_integrationField)
+{
+	integrationField = t_integrationField;
+}
+
+void Tile::rotateVectorField(float t_rot, bool t_target)
+{
+	if (!t_target)
+	{
+		m_vectorLine.setSize({ m_tile.getSize().x / 2,1.0f });
+		m_vectorLine.setRotation(t_rot);
+	}
+	else
+	{
+		m_vectorLine.setSize({ 1.0f,1.0f });
+	}
+}
+
+void Tile::changeMode()
+{
+	m_showCostField = !m_showCostField;
+	m_showVectorField= !m_showVectorField;
+}
+
+void Tile::setBoundary()
+{
+	m_traversable = false;
+	m_tile.setFillColor(sf::Color::Black);
+
 }
 
