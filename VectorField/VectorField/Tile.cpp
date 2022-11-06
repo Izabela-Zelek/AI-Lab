@@ -31,12 +31,12 @@ Tile::Tile(sf::Vector2f size, sf::Vector2f pos,sf::Font& t_font)
 
 	m_costText.setFont(t_font);
 	m_costText.setCharacterSize(10U); //20U
-	m_costText.setFillColor(sf::Color(sf::Color::White.r, sf::Color::White.g, sf::Color::White.b, 127.5f));
+	m_costText.setFillColor(sf::Color(sf::Color::White.r, sf::Color::White.g, sf::Color::White.b, 191.25f));
 	m_costText.setPosition(m_tile.getPosition());
 
 	m_vectorLine.setSize({ 1.0f,1.0f });
 	m_vectorLine.setPosition(pos);
-	m_vectorLine.setFillColor(sf::Color(sf::Color::White.r, sf::Color::White.g, sf::Color::White.b, 127.5f));
+	m_vectorLine.setFillColor(sf::Color(sf::Color::White.r, sf::Color::White.g, sf::Color::White.b, 191.25f));
 }
 
 Tile::~Tile()
@@ -106,10 +106,25 @@ void Tile::rotateVectorField(float t_rot, bool t_target)
 	}
 }
 
-void Tile::changeMode()
+void Tile::changeMode(int t_mode)
 {
-	m_showCostField = !m_showCostField;
-	m_showVectorField= !m_showVectorField;
+	switch (t_mode)
+	{
+	case 0:
+		m_showCostField = false;
+		m_showVectorField = false;
+		break;
+	case 1:
+		m_showCostField = true;
+		m_showVectorField = false;
+		break;
+	case 2:
+		m_showCostField = false;
+		m_showVectorField = true;
+		break;
+	default:
+		break;
+	}
 }
 
 void Tile::setBoundary()
@@ -123,7 +138,7 @@ void Tile::heatMap(sf::Color t_color)
 {
 	if (m_traversable)
 	{
-		if (t_color != sf::Color::Green && t_color != sf::Color::Red)
+		if (t_color != sf::Color(15, 138, 48) && t_color != sf::Color(209, 15, 15))
 		{
 			m_tile.setFillColor(t_color);
 			colour = t_color;

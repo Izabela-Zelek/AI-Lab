@@ -3,12 +3,12 @@
 Grid::Grid()
 {
 	setUpFont();
+	sf::Vector2f size = { (float)SCREEN_WIDTH / COL,(float)SCREEN_HEIGHT / ROW };
 
 	for (int i = 0; i < ROW; i++)
 	{
 		for (int j = 0; j < COL; j++)
 		{
-			sf::Vector2f size = { (float)SCREEN_WIDTH / COL,(float)SCREEN_HEIGHT / ROW };
 			sf::Vector2f pos = { size.x / 2 + size.x * (j), size.y / 2 +size.y * (i)};
 			Tile m_square(size,pos,m_font);
 			m_grid.push_back(m_square);
@@ -23,6 +23,7 @@ Grid::Grid()
 			m_grid[i].setBoundary();
 		}
 	}
+	m_player.init(size);
 }
 
 Grid::~Grid()
@@ -35,26 +36,26 @@ void Grid::render(sf::RenderWindow& t_window)
 	{
 		m_grid.at(i).render(t_window);
 	}
+	m_player.render(t_window);
 }
 
 void Grid::checkMouseInput(sf::RenderWindow& t_window, bool t_leftClick)
 {
 	sf::Vector2i mouse_pos = sf::Mouse::getPosition(t_window); // Mouse position relative to the window
 	sf::Vector2f translated_pos = t_window.mapPixelToCoords(mouse_pos); // Mouse position translated into world coordinates
-
 	for (int i = 0; i < MAX_TILE; i++)
 	{
 		if (m_grid[i].getGlobalBounds().contains(translated_pos))
 		{
 			if (t_leftClick)
 			{
-				if (i != m_interactables[1])
+				if (i != m_interactables[1] && m_grid[i].getTraversable())
 				{
 					if (startChosen)
 					{
 						m_grid[m_interactables[0]].changeColour(sf::Color(64, 11, 60));
 					}
-					m_grid[i].changeColour(sf::Color::Green);
+					m_grid[i].changeColour(sf::Color(15, 138, 48));
 					startChosen = true;
 					m_interactables[0] = i;
 					calculated = false;
@@ -62,13 +63,13 @@ void Grid::checkMouseInput(sf::RenderWindow& t_window, bool t_leftClick)
 			}
 			else
 			{
-				if (i != m_interactables[0])
+				if (i != m_interactables[0] && m_grid[i].getTraversable())
 				{
 					if (targetChosen)
 					{
 						m_grid[m_interactables[1]].changeColour(sf::Color(64, 11, 60));
 					}
-					m_grid[i].changeColour(sf::Color::Red);
+					m_grid[i].changeColour(sf::Color(209, 15, 15));
 					targetChosen = true;
 					m_interactables[1] = i;
 					targetLoc = i;
@@ -85,16 +86,17 @@ void Grid::checkMouseInput(sf::RenderWindow& t_window, bool t_leftClick)
 		setUpHeatMap();
 		setUpIntegrationField();
 		setUpVectorField();
-		pathFinding();
+		m_player.spawnPlayer(sf::Vector2f(m_grid[m_interactables[0]].getXPos(), m_grid[m_interactables[0]].getYPos()));
+		path = pathFinding();
 		calculated = true;
 	}
 }
 
-void Grid::checkKeyInput()
+void Grid::checkKeyInput(int t_mode)
 {
 	for (int i = 0; i < MAX_TILE; i++)
 	{
-		m_grid[i].changeMode();
+		m_grid[i].changeMode(t_mode);
 	}
 }
 
@@ -388,7 +390,19 @@ void Grid::setUpHeatMap()
 	}
 }
 
-void Grid::pathFinding()
+
+void Grid::update()
+{
+	//if (targetChosen && startChosen && calculated)
+	//{
+	//	if (m_player.movePlayer(sf::Vector2f(m_grid[path[m_count]].getXPos(), m_grid[path[m_count]].getYPos())))
+	//	{
+	//		//m_count++;
+	//	}
+	//}
+}
+
+std::vector<int> Grid::pathFinding()
 {
 	bool goalReached = false;
 	std::vector<int> pathList;
@@ -432,7 +446,7 @@ void Grid::pathFinding()
 			break;
 		}
 		pathList.push_back(tempCell);
-		m_grid[tempCell].changeColour(sf::Color::Yellow);
+		m_grid[tempCell].changeColour(sf::Color(211, 214, 30));
 	}
-
+	return pathList;
 }

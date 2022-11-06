@@ -17,7 +17,7 @@ public:
 	void addCost(int t_cost);
 	void addIntegrationField(float t_integrationField);
 	void rotateVectorField(float t_rot, bool t_target);
-	void changeMode();
+	void changeMode(int t_mode);
 	void setBoundary();
 	void heatMap(sf::Color t_color);
 
@@ -38,7 +38,7 @@ private:
 	bool m_traversable;
 	int m_cost = -1;
 	bool m_showCost = false;
-	bool m_showCostField = true;
+	bool m_showCostField = false;
 	bool m_showVectorField = false;
 	float integrationField = -1;
 	sf::RectangleShape m_tile;

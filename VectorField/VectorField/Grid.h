@@ -5,6 +5,7 @@
 #define GRID_HPP
 #include "Tile.h"
 #include "ScreenSize.h"
+#include "Player.h"
 
 class Grid
 {
@@ -14,7 +15,7 @@ public:
 
 	void render(sf::RenderWindow& t_window);
 	void checkMouseInput(sf::RenderWindow& t_window, bool t_leftClick);
-	void checkKeyInput();
+	void checkKeyInput(int t_mode);
 	void createCostField();
 	void setVertical(int t_gridNr, int rowCalc, int t_cost);
 	void setHorizontal(int t_gridNr, int colCalc, int t_cost);
@@ -24,7 +25,8 @@ public:
 	void setUpIntegrationField();
 	void setUpVectorField();
 	void setUpHeatMap();
-	void pathFinding();
+	void update();
+	std::vector<int> pathFinding();
 
 private:
 
@@ -36,8 +38,13 @@ private:
 	bool targetChosen = false;
 	bool calculated = false;
 	int m_interactables[2] = {-1,-2};
+	int m_count = 0;
 	std::vector<Tile> m_grid;
+	std::vector<int> path;
+
 	sf::Font m_font;
+
+	Player m_player;
 
 };
 

@@ -34,6 +34,8 @@ private:
 	bool m_exitGame; // control exiting game
 
 	Grid m_grid = Grid();
+
+	int m_mode = 0;
 };
 
 #endif // !GAME_HPP

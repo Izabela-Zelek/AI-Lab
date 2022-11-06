@@ -96,7 +96,12 @@ void Game::processKeys(sf::Event t_event)
 	}
 	if (sf::Keyboard::C == t_event.key.code)
 	{
-		m_grid.checkKeyInput();
+		m_mode++;
+		if (m_mode >= 3)
+		{
+			m_mode = 0;
+		}
+		m_grid.checkKeyInput(m_mode);
 	}
 }
 
@@ -122,6 +127,7 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		m_window.close();
 	}
+	m_grid.update();
 }
 
 /// <summary>
