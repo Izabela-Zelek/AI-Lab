@@ -31,7 +31,7 @@ Tile::Tile(sf::Vector2f size, sf::Vector2f pos,sf::Font& t_font)
 
 	m_costText.setFont(t_font);
 	m_costText.setCharacterSize(10U); //20U
-	m_costText.setFillColor(sf::Color::White);
+	m_costText.setFillColor(sf::Color(sf::Color::White.r, sf::Color::White.g, sf::Color::White.b, 127.5f));
 	m_costText.setPosition(m_tile.getPosition());
 
 	m_vectorLine.setSize({ 1.0f,1.0f });
@@ -118,4 +118,17 @@ void Tile::setBoundary()
 	m_tile.setFillColor(sf::Color::Black);
 
 }
+
+void Tile::heatMap(sf::Color t_color)
+{
+	if (m_traversable)
+	{
+		if (t_color != sf::Color::Green && t_color != sf::Color::Red)
+		{
+			m_tile.setFillColor(t_color);
+			colour = t_color;
+		}
+	}
+}
+
 

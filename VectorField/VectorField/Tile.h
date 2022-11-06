@@ -19,6 +19,7 @@ public:
 	void rotateVectorField(float t_rot, bool t_target);
 	void changeMode();
 	void setBoundary();
+	void heatMap(sf::Color t_color);
 
 	bool getTraversable() { return m_traversable; }
 
@@ -28,9 +29,10 @@ public:
 	float getXPos() { return m_tile.getPosition().x; }
 	float getYPos() { return m_tile.getPosition().y; }
 	float getIntegrationField() { return integrationField; }
-
+	float getVectorLineRotation() { return m_vectorLine.getRotation(); }
 	sf::FloatRect getGlobalBounds();
 
+	sf::Color colour;
 
 private:
 	bool m_traversable;

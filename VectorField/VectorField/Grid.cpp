@@ -57,6 +57,7 @@ void Grid::checkMouseInput(sf::RenderWindow& t_window, bool t_leftClick)
 					m_grid[i].changeColour(sf::Color::Green);
 					startChosen = true;
 					m_interactables[0] = i;
+					calculated = false;
 				}
 			}
 			else
@@ -81,8 +82,10 @@ void Grid::checkMouseInput(sf::RenderWindow& t_window, bool t_leftClick)
 	{
 		clearCostField();
 		createCostField();
+		setUpHeatMap();
 		setUpIntegrationField();
 		setUpVectorField();
+		pathFinding();
 		calculated = true;
 	}
 }
@@ -364,4 +367,72 @@ void Grid::setUpVectorField()
 			}
 		}
 	}
+}
+
+void Grid::setUpHeatMap()
+{
+	sf::Color tempColor = sf::Color(140, 26, 120);
+	for (int j = 1; j < ROW; j = j + 2)
+	{
+		for (int i = 0; i < MAX_TILE; i++)
+		{
+			if (i != m_interactables[0] && i != m_interactables[1])
+			{
+				if (m_grid[i].getCost() == j || m_grid[i].getCost() == j + 1)
+				{
+					m_grid[i].heatMap(tempColor);
+				}
+			}
+		}
+		tempColor = sf::Color(tempColor.r - 5, tempColor.g - 1, tempColor.b - 4);
+	}
+}
+
+void Grid::pathFinding()
+{
+	bool goalReached = false;
+	std::vector<int> pathList;
+	int tempCell = m_interactables[0];
+	while (!goalReached)
+	{
+		int rot = m_grid[tempCell].getVectorLineRotation();
+		switch (rot)
+		{
+		case 0:
+			tempCell = tempCell + 1;
+			break;
+		case 45:
+			tempCell = tempCell + 1 + ROW;
+			break;
+		case 90:
+			tempCell = tempCell + ROW;
+			break;
+		case 135:
+			tempCell = tempCell - 1 + ROW;
+			break;
+		case 180:
+			tempCell = tempCell - 1;
+			break;
+		case 225:
+			tempCell = tempCell - 1 - ROW;
+			break;
+		case 270:
+			tempCell = tempCell - ROW;
+			break;
+		case 315:
+			tempCell = tempCell + 1 - ROW;
+			break;
+		default:
+			break;
+		}
+
+		if (tempCell == m_interactables[1])
+		{
+			goalReached = true;
+			break;
+		}
+		pathList.push_back(tempCell);
+		m_grid[tempCell].changeColour(sf::Color::Yellow);
+	}
+
 }

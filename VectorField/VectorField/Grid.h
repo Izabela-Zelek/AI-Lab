@@ -23,6 +23,8 @@ public:
 	void setUpFont();
 	void setUpIntegrationField();
 	void setUpVectorField();
+	void setUpHeatMap();
+	void pathFinding();
 
 private:
 

@@ -1,14 +1,15 @@
 ﻿  Grid.cpp
-C:\Users\viole\Desktop\AI\AI-Lab\VectorField\VectorField\Tile.h(26,47): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-C:\Users\viole\Desktop\AI\AI-Lab\VectorField\VectorField\Grid.cpp(347,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\viole\Desktop\AI\AI-Lab\VectorField\VectorField\Grid.cpp(358,54): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+C:\Users\viole\Desktop\AI\AI-Lab\VectorField\VectorField\Tile.h(27,47): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+C:\Users\viole\Desktop\AI\AI-Lab\VectorField\VectorField\Grid.cpp(350,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\viole\Desktop\AI\AI-Lab\VectorField\VectorField\Grid.cpp(361,54): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\viole\Desktop\AI\AI-Lab\VectorField\VectorField\Grid.cpp(362,54): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+C:\Users\viole\Desktop\AI\AI-Lab\VectorField\VectorField\Grid.cpp(365,54): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
               _Ty=int
           ]
+C:\Users\viole\Desktop\AI\AI-Lab\VectorField\VectorField\Grid.cpp(398,11): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
   VectorField.vcxproj -> C:\Users\viole\Desktop\AI\AI-Lab\VectorField\Debug\VectorField.exe
