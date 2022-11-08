@@ -13,7 +13,6 @@ Grid::Grid()
 			Tile m_square(size,pos,m_font);
 			m_grid.push_back(m_square);
 		}
-		std::cout << i << std::endl;
 	}
 
 	for (int i = 0; i < MAX_TILE; i++)
@@ -39,15 +38,15 @@ void Grid::render(sf::RenderWindow& t_window)
 	m_player.render(t_window);
 }
 
-void Grid::checkMouseInput(sf::RenderWindow& t_window, bool t_leftClick)
+void Grid::checkMouseInput(sf::RenderWindow& t_window, bool t_leftClick, bool t_rightClick)
 {
 	sf::Vector2i mouse_pos = sf::Mouse::getPosition(t_window); // Mouse position relative to the window
 	sf::Vector2f translated_pos = t_window.mapPixelToCoords(mouse_pos); // Mouse position translated into world coordinates
 	for (int i = 0; i < MAX_TILE; i++)
 	{
-		if (m_grid[i].getGlobalBounds().contains(translated_pos))
+		if (m_grid[i].getGlobalBounds().contains(translated_pos) && goalReached)
 		{
-			if (t_leftClick)
+			if (t_leftClick && !t_rightClick)
 			{
 				if (i != m_interactables[1] && m_grid[i].getTraversable())
 				{
@@ -61,7 +60,7 @@ void Grid::checkMouseInput(sf::RenderWindow& t_window, bool t_leftClick)
 					calculated = false;
 				}
 			}
-			else
+			else if (!t_leftClick && t_rightClick)
 			{
 				if (i != m_interactables[0] && m_grid[i].getTraversable())
 				{
@@ -77,9 +76,14 @@ void Grid::checkMouseInput(sf::RenderWindow& t_window, bool t_leftClick)
 				}
 
 			}
+			else
+			{
+				m_grid[i].setTraversable(false);
+				calculated = false;
+			}
 		}
 	}
-	if (targetChosen && startChosen && !calculated)
+	if (targetChosen && startChosen && !calculated && goalReached)
 	{
 		clearCostField();
 		createCostField();
@@ -137,7 +141,7 @@ void Grid::setHorizontal(int t_gridNr, int t_colCalc, int t_cost)
 
 	if (t_colCalc > 0)
 	{
-		while (nr % 50 <= 49 && nr % 50 != 0)
+		while (nr % ROW <= ROW - 1 && nr % ROW != 0)
 		{
 			m_grid[nr].addCost(cost);
 			nr += t_colCalc;
@@ -146,7 +150,7 @@ void Grid::setHorizontal(int t_gridNr, int t_colCalc, int t_cost)
 	}
 	else if (t_colCalc < 0)
 	{
-		while (nr % 50 != 49 && nr % 50 >= 0)
+		while (nr % ROW != ROW - 1 && nr % ROW >= 0)
 		{
 			m_grid[nr].addCost(cost);
 			nr += t_colCalc;
@@ -162,18 +166,23 @@ void Grid::clearCostField()
 		m_grid[i].addCost(-1);
 		m_grid[i].addIntegrationField(-1);
 	}
+
+	path.clear();
+	m_player.resetValues();
+	m_count = 0;
+	goalReached = false;
 }
 
 void Grid::setCost(int t_gridNr,int t_rowCalc,int t_cornerCalc, int t_cost)
 {
 	int calc = t_gridNr + t_rowCalc + t_cornerCalc;
-	if ( calc > 0 && calc < MAX_TILE && t_gridNr % 50 == 0)
+	if ( calc > 0 && calc < MAX_TILE && t_gridNr % ROW == 0)
 	{
 		m_grid[calc].addCost(t_cost + 1);
 		setVertical(calc, t_rowCalc, t_cost + 1);
 		setVertical(calc, t_rowCalc, t_cost + 1);
 	}
-	else if (calc > 0 && calc < MAX_TILE && t_gridNr % 50 >= 49)
+	else if (calc > 0 && calc < MAX_TILE && t_gridNr % ROW >= ROW - 1)
 	{
 		m_grid[calc].addCost(t_cost + 1);
 		setVertical(calc, t_rowCalc, t_cost + 1);
@@ -393,13 +402,26 @@ void Grid::setUpHeatMap()
 
 void Grid::update()
 {
-	//if (targetChosen && startChosen && calculated)
-	//{
-	//	if (m_player.movePlayer(sf::Vector2f(m_grid[path[m_count]].getXPos(), m_grid[path[m_count]].getYPos())))
-	//	{
-	//		//m_count++;
-	//	}
-	//}
+	if (!goalReached)
+	{
+		if (targetChosen && startChosen && calculated && m_count < path.size())
+		{
+			if (m_player.movePlayer(sf::Vector2f(m_grid[path[m_count]].getXPos(), m_grid[path[m_count]].getYPos())))
+			{
+				m_grid[path[m_count]].removePath();
+				m_count++;
+				m_player.resetValues();
+			}
+		}
+		else if (targetChosen && startChosen && calculated)
+		{
+			if (m_player.movePlayer(sf::Vector2f(m_grid[targetLoc].getXPos(), m_grid[targetLoc].getYPos())))
+			{
+				goalReached = true;
+			}
+		}
+	}
+	/*if(!goalReached)*/
 }
 
 std::vector<int> Grid::pathFinding()

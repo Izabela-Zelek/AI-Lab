@@ -14,7 +14,7 @@ public:
 	~Grid();
 
 	void render(sf::RenderWindow& t_window);
-	void checkMouseInput(sf::RenderWindow& t_window, bool t_leftClick);
+	void checkMouseInput(sf::RenderWindow& t_window, bool t_leftClick, bool t_rightClick);
 	void checkKeyInput(int t_mode);
 	void createCostField();
 	void setVertical(int t_gridNr, int rowCalc, int t_cost);
@@ -37,6 +37,7 @@ private:
 	bool startChosen = false;
 	bool targetChosen = false;
 	bool calculated = false;
+	bool goalReached = true;
 	int m_interactables[2] = {-1,-2};
 	int m_count = 0;
 	std::vector<Tile> m_grid;

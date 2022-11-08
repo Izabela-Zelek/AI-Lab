@@ -146,4 +146,15 @@ void Tile::heatMap(sf::Color t_color)
 	}
 }
 
+void Tile::setTraversable(bool isTraversable)
+{
+	m_traversable = isTraversable;
+	m_tile.setFillColor(sf::Color::Black);
+}
+
+void Tile::removePath()
+{
+	m_tile.setFillColor(colour);
+}
+
 

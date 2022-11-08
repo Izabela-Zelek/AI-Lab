@@ -20,6 +20,8 @@ public:
 	void changeMode(int t_mode);
 	void setBoundary();
 	void heatMap(sf::Color t_color);
+	void setTraversable(bool isTraversable);
+	void removePath();
 
 	bool getTraversable() { return m_traversable; }
 

@@ -109,11 +109,15 @@ void Game::processMouse(sf::Event t_event)
 {
 	if (sf::Mouse::Left == t_event.key.code)
 	{
-		m_grid.checkMouseInput(m_window, true);
+		m_grid.checkMouseInput(m_window, true,false);
 	}
 	else if (sf::Mouse::Right == t_event.key.code)
 	{
-		m_grid.checkMouseInput(m_window, false);
+		m_grid.checkMouseInput(m_window, false,true);
+	}
+	else if (sf::Mouse::Middle == t_event.key.code)
+	{
+		m_grid.checkMouseInput(m_window, false, false);
 	}
 }
 

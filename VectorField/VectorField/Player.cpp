@@ -36,15 +36,26 @@ sf::Vector2f Player::normalize(sf::Vector2f& source)
 
 bool Player::movePlayer(sf::Vector2f t_pos)
 {
-	/*if (m_moving)
+	if (m_moving)
 	{
 		m_direction = normalize(t_pos - m_playerSprite.getPosition());
 		m_moving = false;
 	}
-	if (m_playerSprite.getPosition().x != t_pos.x && m_playerSprite.getPosition().y != t_pos.y)
+	if (m_playerSprite.getPosition().x <= t_pos.x + 1 && m_playerSprite.getPosition().x >= t_pos.x - 1 &&
+		m_playerSprite.getPosition().y <= t_pos.y + 1 && m_playerSprite.getPosition().y >= t_pos.y - 1)
+	{
+		m_next = true;
+	}
+	else if(!m_next)
 	{
 		m_playerSprite.move(m_speed * m_direction.x, m_speed * m_direction.y);
-	}*/
+	}
 
 	return m_next;
+}
+
+void Player::resetValues()
+{
+	m_moving = true;
+	m_next = false;
 }
