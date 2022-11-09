@@ -173,14 +173,21 @@ void Grid::setHorizontal(int t_gridNr, int t_colCalc, int t_cost)
 
 void Grid::updateCostAtObstactle()
 {
+	int additionalCost = 0;
+	int tileCounter;
 	for (int i = 0; i < MAX_TILE; i++)
 	{
+		tileCounter = i;
+
 		if (i > ROW && i < MAX_TILE - ROW && m_grid[i].getXPos() != m_grid[0].getXPos() && m_grid[i].getXPos() != m_grid[MAX_TILE - 1].getXPos())
 		{
 			if (!m_grid[i].getTraversable())
 			{
 				if (m_grid[targetLoc].getXPos() > m_grid[i].getXPos())
 				{
+
+					tileCounter = tileCounter - ROW;;
+
 					if (!m_grid[i - ROW].getTraversable() && !m_grid[i + ROW].getTraversable())
 					{
 						m_grid[i - 1].addCost(m_grid[i - 1].getCost() + 1);
