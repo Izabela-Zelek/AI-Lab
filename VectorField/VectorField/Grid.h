@@ -19,6 +19,7 @@ public:
 	void createCostField();
 	void setVertical(int t_gridNr, int rowCalc, int t_cost);
 	void setHorizontal(int t_gridNr, int colCalc, int t_cost);
+	void updateCostAtObstactle();
 	void clearCostField();
 	void setCost(int t_gridNr, int rowCalc, int cornerCalc, int t_cost);
 	void setUpFont();

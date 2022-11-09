@@ -44,7 +44,7 @@ void Grid::checkMouseInput(sf::RenderWindow& t_window, bool t_leftClick, bool t_
 	sf::Vector2f translated_pos = t_window.mapPixelToCoords(mouse_pos); // Mouse position translated into world coordinates
 	for (int i = 0; i < MAX_TILE; i++)
 	{
-		if (m_grid[i].getGlobalBounds().contains(translated_pos) && goalReached)
+		if (m_grid[i].getGlobalBounds().contains(translated_pos))
 		{
 			if (t_leftClick && !t_rightClick)
 			{
@@ -73,20 +73,32 @@ void Grid::checkMouseInput(sf::RenderWindow& t_window, bool t_leftClick, bool t_
 					m_interactables[1] = i;
 					targetLoc = i;
 					calculated = false;
-				}
+				} 
 
 			}
-			else
+			else if (!t_leftClick && !t_rightClick)
 			{
-				m_grid[i].setTraversable(false);
-				calculated = false;
+				if (i > ROW && i < MAX_TILE - ROW && m_grid[i].getXPos() != m_grid[0].getXPos() && m_grid[i].getXPos() != m_grid[MAX_TILE - 1].getXPos())
+				{
+					if (m_grid[i].getTraversable())
+					{
+						m_grid[i].setTraversable(false);
+						calculated = false;
+					}
+					else
+					{
+						m_grid[i].setTraversable(true);
+						calculated = false;
+					}
+				}
 			}
 		}
 	}
-	if (targetChosen && startChosen && !calculated && goalReached)
+	if (targetChosen && startChosen && !calculated)
 	{
 		clearCostField();
 		createCostField();
+		updateCostAtObstactle();
 		setUpHeatMap();
 		setUpIntegrationField();
 		setUpVectorField();
@@ -155,6 +167,47 @@ void Grid::setHorizontal(int t_gridNr, int t_colCalc, int t_cost)
 			m_grid[nr].addCost(cost);
 			nr += t_colCalc;
 			cost++;
+		}
+	}
+}
+
+void Grid::updateCostAtObstactle()
+{
+	for (int i = 0; i < MAX_TILE; i++)
+	{
+		if (i > ROW && i < MAX_TILE - ROW && m_grid[i].getXPos() != m_grid[0].getXPos() && m_grid[i].getXPos() != m_grid[MAX_TILE - 1].getXPos())
+		{
+			if (!m_grid[i].getTraversable())
+			{
+				if (m_grid[targetLoc].getXPos() > m_grid[i].getXPos())
+				{
+					if (!m_grid[i - ROW].getTraversable() && !m_grid[i + ROW].getTraversable())
+					{
+						m_grid[i - 1].addCost(m_grid[i - 1].getCost() + 1);
+					}
+				}
+				else if (m_grid[targetLoc].getXPos() < m_grid[i].getXPos())
+				{
+					if (!m_grid[i - ROW].getTraversable() && !m_grid[i + ROW].getTraversable())
+					{
+						m_grid[i + 1].addCost(m_grid[i + 1].getCost() + 1);
+					}
+				}
+				else if (m_grid[targetLoc].getYPos() > m_grid[i].getYPos())
+				{
+					if (!m_grid[i - 1].getTraversable() && !m_grid[i + 1].getTraversable())
+					{
+						m_grid[i - ROW].addCost(m_grid[i - ROW].getCost() + 1);
+					}
+				}
+				else if (m_grid[targetLoc].getYPos() < m_grid[i].getYPos())
+				{
+					if (!m_grid[i - 1].getTraversable() && !m_grid[i + 1].getTraversable())
+					{
+						m_grid[i + ROW].addCost(m_grid[i + ROW].getCost() + 1);
+					}
+				}
+			}
 		}
 	}
 }

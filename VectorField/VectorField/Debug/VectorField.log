@@ -1,16 +1,16 @@
 ﻿  Grid.cpp
 C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\VectorField\VectorField\Tile.h(29,47): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\VectorField\VectorField\Grid.cpp(361,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\VectorField\VectorField\Grid.cpp(372,54): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\VectorField\VectorField\Grid.cpp(414,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\VectorField\VectorField\Grid.cpp(425,54): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\VectorField\VectorField\Grid.cpp(376,54): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\VectorField\VectorField\Grid.cpp(429,54): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\VectorField\VectorField\Grid.cpp(407,60): warning C4018: '<': signed/unsigned mismatch
-C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\VectorField\VectorField\Grid.cpp(434,11): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\VectorField\VectorField\Grid.cpp(460,60): warning C4018: '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\VectorField\VectorField\Grid.cpp(487,11): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
   VectorField.vcxproj -> C:\Users\gameuser\Desktop\Games4\AI\AI-Lab\VectorField\Debug\VectorField.exe
