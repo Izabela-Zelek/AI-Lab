@@ -6,25 +6,10 @@ Tile::Tile(sf::Vector2f size, sf::Vector2f pos,sf::Font& t_font)
 	m_tile.setOrigin(m_tile.getLocalBounds().width / 2, m_tile.getLocalBounds().height / 2);
 	m_tile.setPosition(pos);
 	
+	m_traversable = true;
 
-	if (std::rand() % 10 == 0)
-	{
-		m_traversable = false;
-	}
-	else
-	{
-		m_traversable = true;
-	}
+	m_tile.setFillColor(sf::Color(64, 11, 60));
 
-	if (m_traversable)
-	{
-		m_tile.setFillColor(sf::Color(64, 11, 60));
-	}
-	else
-	{
-		m_tile.setFillColor(sf::Color::Black);
-
-	}
 
 	m_tile.setOutlineColor(sf::Color(161, 138, 166));
 	m_tile.setOutlineThickness(0.8f);

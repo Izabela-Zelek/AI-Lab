@@ -76,7 +76,7 @@ void Grid::checkMouseInput(sf::RenderWindow& t_window, bool t_leftClick, bool t_
 				} 
 
 			}
-			else if (!t_leftClick && !t_rightClick)
+			else if (!t_leftClick && !t_rightClick && i != m_interactables[0] && i != m_interactables[1])
 			{
 				if (i > ROW && i < MAX_TILE - ROW && m_grid[i].getXPos() != m_grid[0].getXPos() && m_grid[i].getXPos() != m_grid[MAX_TILE - 1].getXPos())
 				{
@@ -174,10 +174,11 @@ void Grid::setHorizontal(int t_gridNr, int t_colCalc, int t_cost)
 void Grid::updateCostAtObstactle()
 {
 	int additionalCost = 0;
-	int tileCounter;
+	int currentTile;
+	int currentTile2;
+	int costCounter;
 	for (int i = 0; i < MAX_TILE; i++)
 	{
-		tileCounter = i;
 
 		if (i > ROW && i < MAX_TILE - ROW && m_grid[i].getXPos() != m_grid[0].getXPos() && m_grid[i].getXPos() != m_grid[MAX_TILE - 1].getXPos())
 		{
@@ -185,34 +186,68 @@ void Grid::updateCostAtObstactle()
 			{
 				if (m_grid[targetLoc].getXPos() > m_grid[i].getXPos())
 				{
-
-					tileCounter = tileCounter - ROW;;
-
-					if (!m_grid[i - ROW].getTraversable() && !m_grid[i + ROW].getTraversable())
+					currentTile = i - ROW;
+					currentTile2 = i + ROW;
+					costCounter = 0;
+					while (!m_grid[currentTile].getTraversable() && !m_grid[currentTile2].getTraversable())
 					{
-						m_grid[i - 1].addCost(m_grid[i - 1].getCost() + 1);
+						if (currentTile > 0 && currentTile2 < MAX_TILE)
+						{
+							currentTile -= ROW;
+							currentTile2 += ROW;
+							costCounter++;
+						}
 					}
+					m_grid[i - 1].addCost(m_grid[i - 1].getCost() + costCounter);
+					setHorizontal(i - 1, -1, m_grid[i - 1].getCost());
 				}
 				else if (m_grid[targetLoc].getXPos() < m_grid[i].getXPos())
 				{
-					if (!m_grid[i - ROW].getTraversable() && !m_grid[i + ROW].getTraversable())
+					currentTile = i - ROW;
+					currentTile2 = i + ROW;
+					costCounter = 0;
+
+					while (currentTile > 0 && currentTile2 < MAX_TILE && !m_grid[currentTile].getTraversable() && !m_grid[currentTile2].getTraversable())
 					{
-						m_grid[i + 1].addCost(m_grid[i + 1].getCost() + 1);
+						currentTile -= ROW;
+						currentTile2 += ROW;
+						costCounter++;
 					}
+					m_grid[i + 1].addCost(m_grid[i + 1].getCost() + costCounter);
+					setHorizontal(i + 1, +1 , m_grid[i + 1].getCost());
 				}
-				else if (m_grid[targetLoc].getYPos() > m_grid[i].getYPos())
+				if (m_grid[targetLoc].getYPos() > m_grid[i].getYPos())
 				{
-					if (!m_grid[i - 1].getTraversable() && !m_grid[i + 1].getTraversable())
+					currentTile = i - 1;
+					currentTile2 = i + 1;
+					costCounter = 0;
+
+					while (!m_grid[currentTile].getTraversable() && !m_grid[currentTile2].getTraversable())
 					{
-						m_grid[i - ROW].addCost(m_grid[i - ROW].getCost() + 1);
+						currentTile -= 1;
+						currentTile2 += 1;
+						costCounter++;
 					}
+					m_grid[i - ROW].addCost(m_grid[i - ROW].getCost() + costCounter);
+					setVertical(i - ROW, -ROW, m_grid[i - ROW].getCost());
 				}
 				else if (m_grid[targetLoc].getYPos() < m_grid[i].getYPos())
 				{
-					if (!m_grid[i - 1].getTraversable() && !m_grid[i + 1].getTraversable())
+					currentTile = i - 1;
+					currentTile2 = i + 1;
+					costCounter = 0;
+
+					while (!m_grid[currentTile].getTraversable() && !m_grid[currentTile2].getTraversable())
 					{
-						m_grid[i + ROW].addCost(m_grid[i + ROW].getCost() + 1);
+						currentTile -= 1;
+						currentTile2 += 1;
+						costCounter++;
 					}
+
+					m_grid[i + ROW].addCost(m_grid[i + ROW].getCost() + costCounter);
+					setVertical(i + ROW, +ROW, m_grid[i + ROW].getCost());
+
+
 				}
 			}
 		}
@@ -298,28 +333,25 @@ void Grid::setUpVectorField()
 
 		if (m_grid[i].getTraversable())
 		{
-			//If its a neihbour cell to the target, it will choose to go directly to it
-			if (i == targetLoc - 1 || i == targetLoc + 1 || i == targetLoc - ROW || i == targetLoc + ROW)
+			//Check if they're on the same line as target. if so, straight line
+			if (m_grid[i].getXPos() < m_grid[targetLoc].getXPos() && m_grid[i].getYPos() == m_grid[targetLoc].getYPos() && m_grid[i + 1].getTraversable())
 			{
-				if (i == targetLoc - 1)
-				{
-					m_grid[i].rotateVectorField(0, false);
-				}
-				else if (i == targetLoc + 1)
-				{
-					m_grid[i].rotateVectorField(180, false);
-				}
-				else if (i == targetLoc - ROW)
-				{
-					m_grid[i].rotateVectorField(90, false);
-				}
-				else if (i == targetLoc + ROW)
-				{
-					m_grid[i].rotateVectorField(270, false);
-				}
-
+				m_grid[i].rotateVectorField(0, false);
 			}
-			else if (i != targetLoc - 1 && i != targetLoc + 1 && i != targetLoc - ROW && i != targetLoc + ROW)
+			else if (m_grid[i].getXPos() > m_grid[targetLoc].getXPos() && m_grid[i].getYPos() == m_grid[targetLoc].getYPos() && m_grid[i - 1].getTraversable())
+			{
+				m_grid[i].rotateVectorField(180, false);
+			}
+			else if (m_grid[i].getXPos() == m_grid[targetLoc].getXPos() && m_grid[i].getYPos() < m_grid[targetLoc].getYPos() && m_grid[i + ROW].getTraversable())
+			{
+				m_grid[i].rotateVectorField(90, false);
+			}
+			else if (m_grid[i].getXPos() == m_grid[targetLoc].getXPos() && m_grid[i].getYPos() > m_grid[targetLoc].getYPos() && m_grid[i - ROW].getTraversable())
+			{
+				m_grid[i].rotateVectorField(270, false);
+			}
+
+			else
 			{
 				//LEFT, RIGHT,TOP,BOTTOM
 				if (m_grid[i].getXPos() > m_grid[0].getXPos())
@@ -481,7 +513,6 @@ void Grid::update()
 			}
 		}
 	}
-	/*if(!goalReached)*/
 }
 
 std::vector<int> Grid::pathFinding()
