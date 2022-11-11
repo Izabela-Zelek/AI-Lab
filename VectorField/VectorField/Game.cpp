@@ -16,7 +16,7 @@
 /// load and setup thne image
 /// </summary>
 Game::Game() :
-	m_window{ sf::VideoMode{ SCREEN_WIDTH, SCREEN_HEIGHT, 32U }, "SFML Game" },
+	m_window{ sf::VideoMode{ SCREEN_WIDTH, SCREEN_HEIGHT, 32U }, "Vector field" },
 	m_exitGame{false} //when true game will exit
 {
 	setupFontAndText(); // load font 
@@ -141,7 +141,7 @@ void Game::render()
 {
 	m_window.clear(sf::Color::White);
 	m_grid.render(m_window);
-	//m_window.draw(m_welcomeMessage);
+	m_window.draw(m_instruc);
 	//m_window.draw(m_logoSprite);
 	m_window.display();
 }
@@ -155,15 +155,12 @@ void Game::setupFontAndText()
 	{
 		std::cout << "problem loading arial black font" << std::endl;
 	}
-	m_welcomeMessage.setFont(m_ArialBlackfont);
-	m_welcomeMessage.setString("SFML Game");
-	m_welcomeMessage.setStyle(sf::Text::Underlined | sf::Text::Italic | sf::Text::Bold);
-	m_welcomeMessage.setPosition(40.0f, 40.0f);
-	m_welcomeMessage.setCharacterSize(80U);
-	m_welcomeMessage.setOutlineColor(sf::Color::Red);
-	m_welcomeMessage.setFillColor(sf::Color::Black);
-	m_welcomeMessage.setOutlineThickness(3.0f);
-
+	m_instruc.setFont(m_ArialBlackfont);
+	m_instruc.setString("Press 'C' to change modes once path is calculated");
+	m_instruc.setOrigin(0, m_instruc.getLocalBounds().height / 2);
+	m_instruc.setPosition(22.0f, 22.0f);
+	m_instruc.setCharacterSize(20U);
+	m_instruc.setFillColor(sf::Color::White);
 }
 
 /// <summary>
