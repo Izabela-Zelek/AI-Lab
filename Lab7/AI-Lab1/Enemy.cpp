@@ -12,6 +12,8 @@ void Enemy::render(sf::RenderWindow& t_window)
 
 Enemy::Enemy()
 {
-	m_enemy.setSize(sf::Vector2f(20, 20));
+	m_enemy.setSize(sf::Vector2f(15, 15));
 	m_enemy.setFillColor(sf::Color::Red);
+	m_enemy.setOutlineColor(sf::Color::Black);
+	m_enemy.setOutlineThickness(1);
 }
