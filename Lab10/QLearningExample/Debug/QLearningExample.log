@@ -1,0 +1,3 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(534,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (QLearningExample.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  LINK : C:\Users\viole\Desktop\AI\AI-Lab\Lab10\Debug\QLearningExampleForLab.exe not found or not built by the last incremental link; performing full link
+  QLearningExample.vcxproj -> C:\Users\viole\Desktop\AI\AI-Lab\Lab10\Debug\QLearningExampleForLab.exe
