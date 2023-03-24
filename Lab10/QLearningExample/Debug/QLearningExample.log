@@ -1,0 +1,46 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(534,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (QLearningExample.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Agent.cpp
+  Droid.cpp
+C:\Users\viole\Desktop\AI\AI-Lab\Lab10\QLearningExample\Droid.cpp(19,20): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\viole\Desktop\AI\AI-Lab\Lab10\QLearningExample\Droid.cpp(31,40): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+C:\Users\viole\Desktop\AI\AI-Lab\Lab10\QLearningExample\Droid.cpp(31,31): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+C:\Users\viole\Desktop\AI\AI-Lab\Lab10\QLearningExample\Droid.cpp(98,25): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\viole\Desktop\AI\AI-Lab\Lab10\QLearningExample\Droid.cpp(403,27): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  Environment.cpp
+  Game.cpp
+C:\Users\viole\Desktop\AI\AI-Lab\Lab10\QLearningExample\Game.cpp(13,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\viole\Desktop\AI\AI-Lab\Lab10\QLearningExample\Game.cpp(234,9): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  Grid.cpp
+C:\Users\viole\Desktop\AI\AI-Lab\Lab10\QLearningExample\Grid.cpp(71,11): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\viole\Desktop\AI\AI-Lab\Lab10\QLearningExample\Grid.cpp(77,11): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+  HealthPill.cpp
+C:\Users\viole\Desktop\AI\AI-Lab\Lab10\QLearningExample\HealthPill.cpp(21,41): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+C:\Users\viole\Desktop\AI\AI-Lab\Lab10\QLearningExample\HealthPill.cpp(21,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+  Main.cpp
+  Node.cpp
+  Generating Code...
+  QLearningExample.vcxproj -> C:\Users\viole\Desktop\AI\AI-Lab\Lab10\Debug\QLearningExampleForLab.exe
